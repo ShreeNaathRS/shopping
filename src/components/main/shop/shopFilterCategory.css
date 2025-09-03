@@ -1,0 +1,7 @@
+.shop-filter-category{
+    align-self: center;
+    .form-select{
+        width: 25vw;
+    }
+}
+

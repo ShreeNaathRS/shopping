@@ -1,0 +1,24 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+*::-webkit-scrollbar{
+    width: 4px;
+    height: 4px;
+    color: black;
+}
+
+*::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: darkblue;
+  border-radius: 2px;
+}

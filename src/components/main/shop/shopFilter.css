@@ -1,0 +1,18 @@
+.shop-filter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 5px;
+}
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    .shop-filter{
+        justify-content: unset;
+    }
+}
+
+@media only screen and (max-width: 896px) and (orientation: landscape) {
+    .shop-filter{
+        justify-content: unset;
+    }   
+}

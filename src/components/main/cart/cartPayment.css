@@ -1,0 +1,127 @@
+.cart-payment{
+    width: 29vw;
+    left: 70vw;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title{
+    text-align: center;
+}
+
+.scrollable-list{
+    max-height: 72dvh;
+    overflow-y: auto;
+}
+
+.cart-total{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media only screen and (max-height: 932px) and (orientation: portrait) {
+    .cart-payment{
+        width: 29vw;
+        left: 69vw;
+    }
+    .cart-total{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .scrollable-list{
+        height: 69dvh;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-height: 915px) and (orientation: portrait) {
+    .scrollable-list{
+        height: 68.5dvh;
+    }
+}
+
+@media only screen and (max-height: 896px) and (orientation: portrait) {
+    .scrollable-list{
+        height: 67.5dvh;
+    }
+}
+
+@media only screen and (max-height: 844px) and (orientation: portrait) {
+    .scrollable-list{
+        height: 66dvh;
+    }
+}
+
+@media only screen and (max-height: 725px) and (orientation: portrait) {
+    .scrollable-list{
+        height: 64.5dvh;
+    }
+} 
+
+@media only screen and (max-height: 685px) and (orientation: portrait) {
+    .scrollable-list{
+        height: 63.5dvh;
+    }
+}
+
+@media only screen and (max-height: 430px) and (orientation: landscape) {
+    .cart-payment{
+        width: 30vw;
+        left: 69vw;
+    }
+    .scrollable-list{
+        max-height: 65dvh;
+        overflow-y: auto;
+    }
+}
+
+@media only screen and (max-height: 414px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 60dvh;
+    }
+}
+
+@media only screen and (max-height: 412px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 64dvh;
+    }
+}
+
+@media only screen and (max-height: 390px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 63dvh;
+    }
+}
+
+@media only screen and (max-height: 360px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 58dvh;
+    }
+}
+
+@media only screen and (max-height: 320px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 52dvh;
+    }
+}
+
+@media only screen and (max-height: 305px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 47dvh;
+    }
+}
+
+@media only screen and (max-height: 285px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 44.5dvh;
+    }
+}
+
+@media only screen and (max-height: 270px) and (orientation: landscape) {
+    .scrollable-list{
+        max-height: 42dvh;
+    }
+}

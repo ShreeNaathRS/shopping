@@ -1,0 +1,57 @@
+.app{
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+}
+
+:root{
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --card-bg-color: #ffffff;
+}
+
+.dark{
+  --bg-color: #052049;
+  --text-color: lightblue;
+  --card-bg-color: #0b3162;
+}
+
+.apply-theme{
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  .card{
+    border: 1px solid lightgray;
+    background-color: #0b3162;
+    color: lightblue;
+  }
+  .form-control,.form-select{
+    background-color: #143d74;
+    color: lightgray;
+    border: 1px solid lightgray;
+  }
+  .list-group-item{
+    background-color: #0b3162;
+    color: lightblue;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: darkgray;
+    border-radius: 2px;
+  }
+  ::-webkit-input-placeholder{
+    color: lightgray
+  }
+  .bg-danger{
+    background-color: lightcoral !important;
+    color: rgb(24, 24, 24);   
+  }
+  .text-danger{
+    color: lightcoral !important;
+  }
+  .text-muted{
+    color:  #666666 !important;
+  }
+  .add-color{
+    color: #218621 !important;
+  }
+}

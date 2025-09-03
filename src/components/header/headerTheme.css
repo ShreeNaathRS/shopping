@@ -1,0 +1,10 @@
+.theme-toggle{
+    display: flex;
+    margin-top: 10px;
+}
+
+@media screen {
+    .theme-toggle{
+        flex-direction: column;
+    }
+}

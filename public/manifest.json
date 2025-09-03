@@ -1,0 +1,19 @@
+{
+  "name": "Shopping",
+  "short_name": "Shop",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "type": "image/png"
+    },
+    {
+      "src": "dark-logo.svg",
+      "type": "image/png"
+    }
+  ]
+}

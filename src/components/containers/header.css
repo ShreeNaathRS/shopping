@@ -1,0 +1,14 @@
+.header{
+    margin: 0px 10px 0px 5px;
+    flex-shrink: 0;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    height: 8dvh;
+}
+
+@media only screen and (max-width: 896px) and (orientation: landscape) {
+    .header{
+        margin-bottom: 15px;       
+    }
+}

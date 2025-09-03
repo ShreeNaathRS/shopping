@@ -1,0 +1,14 @@
+.main{
+  /* flex: 1 1; */
+  height: 85dvh;
+  min-height: 30dvh;
+  overflow-y: auto;
+  overflow-x: auto;
+  margin-top: 3px;
+}
+
+@media only screen and (max-width: 896px) and (orientation: landscape){
+  .main{
+    max-height: 84dvh;
+  }
+}

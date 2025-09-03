@@ -1,0 +1,16 @@
+
+.login-container{
+    z-index: 100;
+    max-width: 15dvw;
+    min-width: fit-content;
+    position: fixed;
+    top: 8dvh;
+    right: 1dvh;
+    background-color: lightblue;
+    border-radius: 5px;
+}
+
+.login{
+  flex-flow: column;
+  max-width: 20dvw;
+}

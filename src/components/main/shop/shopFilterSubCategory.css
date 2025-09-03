@@ -1,0 +1,14 @@
+.shop-filter-sub-category{
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    .card{
+        height: 38px;
+        min-width: max-content;
+        .card-title{
+            margin-top: -10px;
+        }
+    }
+}

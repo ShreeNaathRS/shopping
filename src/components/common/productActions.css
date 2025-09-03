@@ -1,0 +1,9 @@
+.card-cart-actions{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    .form-control{
+        width: 17%;
+        text-align: center;
+    }
+}

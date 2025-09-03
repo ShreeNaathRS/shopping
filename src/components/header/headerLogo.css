@@ -1,0 +1,30 @@
+.header-logo{
+    display: flex;
+    flex-direction: row;
+    i{
+        margin-top: 10px;
+        font-size: 20px
+    }
+    .online{
+        color: green;
+    }
+    .offline{
+        color: red;
+    }
+}
+
+.header-logo img {
+  /* margin-top: -8px; */
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    .header-logo{
+      margin-left: -10px;
+      i{
+        margin-left: -10px;
+      }
+    }
+}

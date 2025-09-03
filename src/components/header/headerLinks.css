@@ -1,0 +1,38 @@
+.header-links-container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.header-links{
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
+}
+
+.header-links-button{
+    margin-top: 8px;
+}
+
+.badge{
+    position: absolute;
+    margin: -5px 0px 0px 25px;
+}
+
+.link-badge{
+    display: flex;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    .header-links{
+        gap: 3px;
+    }
+}
+
+.cartLink{
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+}

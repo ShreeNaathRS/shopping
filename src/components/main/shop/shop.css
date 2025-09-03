@@ -1,0 +1,6 @@
+.shop{
+    display: flex;
+    flex-direction: column;
+    max-height: 79dvh;
+    padding: 0px 5px 0px 5px;
+}
