@@ -1,8 +1,8 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" fill="#FFFFFF"/>
+  <rect width="200" height="200" fill="#dbf4f9"/>
   <g>
     <!-- Trapezoidal cart body -->
-    <polygon points="50,60 150,60 140,110 60,110" fill="#FFFFFF" stroke="green" stroke-width="4"/>
+    <polygon points="50,60 150,60 140,110 60,110" fill="#dbf4f9" stroke="green" stroke-width="4"/>
     <!-- SWIFT text inside cart -->
     <text x="100" y="90" text-anchor="middle" fill="green" font-size="20" font-family="Cursive" font-weight="bold">SWIFT</text>
     

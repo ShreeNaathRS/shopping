@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './shopFilterSubCategory.css'
+import { useSelector } from 'react-redux'
 
 const ShopFilterSubCategory = ({ selectedCategory, selectedSubCategory, setSelectedCategory, setSelectedSubCategory }) => {
     useEffect(()=>{
@@ -14,17 +15,20 @@ const ShopFilterSubCategory = ({ selectedCategory, selectedSubCategory, setSelec
             localStorage.setItem("localSubCategoryFilter", JSON.stringify({value: selectedSubCategory, expiry: (new Date).getTime()+1800000}))
         }
     }, [selectedCategory, selectedSubCategory])
+    const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (
     <>
         {
             selectedCategory &&
-            <div className='shop-filter-sub-category'>
+            <div className='shop-filter-sub-category '>
             {
-                selectedCategory.subCategories?.map(category=>{
+                selectedCategory.subCategories?.map(subCategory=>{
                     return (
-                    <div key={category.id} className="card" onClick={()=>setSelectedSubCategory(category)}>
+                    <div key={subCategory.id} 
+                        style={{backgroundColor:`${subCategory.id===selectedSubCategory.id?appDarkTheme?'#0a2851':'#bedbe1':''}`}} 
+                        className="card selected-sub-category" onClick={()=>setSelectedSubCategory(subCategory)}>
                         <div className="card-body">
-                        <h5 className="card-title">{category.name}</h5>
+                        <h5 className="card-title">{subCategory.name}</h5>
                         </div>
                     </div>
                     )

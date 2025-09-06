@@ -8,7 +8,6 @@ import offlineLogo from '../../assets/offline-logo.svg'
 import darkOfflineLogo from '../../assets/dark-offline-logo.svg'
 
 const HeaderLogo = () => {
-  const logoURL = 'logo.svg'
   const [online, setOnline] = useState(navigator.onLine)
   const appDarkTheme = useSelector(state=>state.appDarkTheme)
   useEffect(()=>{

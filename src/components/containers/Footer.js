@@ -1,12 +1,10 @@
-import { useSelector } from 'react-redux'
 import './footer.css'
 
 const Footer = () => {
-  const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (
-    <div className={`${appDarkTheme? 'apply-theme dark': ''}`}>
+    <div>
         <footer className="footer">
-          <p>© 2025 EaseKart. All rights reserved</p>
+          <p>© 2025 SwiftKart. All rights reserved</p>
         </footer>
     </div>
   )

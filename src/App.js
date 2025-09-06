@@ -40,7 +40,7 @@ function App() {
 
   const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (
-    <div className={`app ${appDarkTheme? 'apply-theme dark': ''}`}>
+    <div className={`app apply-theme ${appDarkTheme? 'dark': 'light'}`}>
       <Header setSearchText={setSearchText} />
       <Main products={products} searchText={searchText} setSearchText={setSearchText}/>
       <Footer/>

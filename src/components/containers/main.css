@@ -1,5 +1,5 @@
 .main{
-  /* flex: 1 1; */
+  flex: 1;
   height: 85dvh;
   min-height: 30dvh;
   overflow-y: auto;
