@@ -18,34 +18,30 @@ const CartPayment = ({ productCartSlice }) => {
     }, [productCartSlice])
 
     return (
-        <div className='cart-payment'>
-            <div className="card">
-            <h5 className='card-title'>Cart Summary</h5>
-            <ul className="list-group list-group-flush">
-                <div className='scrollable-list'>
-                {
-                productCartSlice && productCartSlice.map(product=>{
-                    return (
-                    
-                    <li className="list-group-item">
-                        <span className='fw-bold'>{product.company.substring(0,10)+(product.company.length>10?"...":"")}</span> &nbsp;
-                        <span>{product.desc.substring(0,10)+(product.desc.length>10?"...":"")}</span><br />
-                        <div className='cart-total'>
-                        <span>Rs. {new Intl.NumberFormat('en-IN').format(product.price)} x {product.qty}</span>
-                        <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(product.price*product.qty)}</span>
-                        </div>
-                    </li>
-                    )
-                })
-                }
-                </div>
-                <li className="list-group-item cart-total fw-bold">
+            <div className="card cart-payment">
+                <h5 className='card-title'>Cart Summary</h5>
+                <ul className="list-group list-group-flush scrollable-list">
+                    {
+                    productCartSlice && productCartSlice.map(product=>{
+                        return (
+                        
+                        <li className="list-group-item">
+                            <span className='fw-bold'>{product.company.substring(0,10)+(product.company.length>10?"...":"")}</span> &nbsp;
+                            <span>{product.desc.substring(0,10)+(product.desc.length>10?"...":"")}</span><br />
+                            <div className='cart-total'>
+                            <span>Rs. {new Intl.NumberFormat('en-IN').format(product.price)} x {product.qty}</span>
+                            <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(product.price*product.qty)}</span>
+                            </div>
+                        </li>
+                        )
+                    })
+                    }
+                </ul>
+                <li className="list-group list-group-item cart-total fw-bold">
                     <span>Sub Total ({cartCount} items)</span>
                     <span>Rs. {new Intl.NumberFormat('en-IN').format(sum)}</span>
                 </li>
-            </ul>
             </div>
-        </div>
     )
 }
 
