@@ -8,7 +8,6 @@ import Main from './components/containers/Main';
 import { useEffect, useRef, useState } from 'react';
 import productAxios from './service'
 import { useSelector } from 'react-redux';
-import HeaderLoginModal from './components/header/HeaderLoginModal';
 
 function App() {
 
@@ -36,7 +35,7 @@ function App() {
       }
     }
     fetchProducts()
-  }, [])
+  })
 
   const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (

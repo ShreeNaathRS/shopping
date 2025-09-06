@@ -24,7 +24,7 @@ const Shop = ({products, searchText}) => {
       }
     }
     fetchCategories()
-  },[])
+  })
 
   return (
     <div className='shop'>

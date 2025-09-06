@@ -17,7 +17,7 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
         }
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    });
 
     document.addEventListener("DOMContentLoaded",  () => {
         const profileBtn = document.getElementById("profileBtn");

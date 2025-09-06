@@ -25,7 +25,7 @@ const counterSlice = createSlice({
         remove: (state, action)=>{
             const {id, category, subCategory} = action.payload
             let newState = [...state]
-            const removeIndex = newState.findIndex(s=>s.id == id && s.category == category && s.subCategory === subCategory)
+            const removeIndex = newState.findIndex(s=>s.id === id && s.category === category && s.subCategory === subCategory)
             if(newState.length && removeIndex>=0) {
                 if(newState[removeIndex].qty && newState[removeIndex].qty>1){
                     newState = state.map((product, i) =>

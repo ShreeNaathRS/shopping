@@ -8,7 +8,7 @@ const ShopList = ({ products, selectedCategory, selectedSubCategory, searchText 
         {
         selectedCategory && selectedSubCategory &&
         products.filter(product=>searchText?product.company.toLowerCase().includes(searchText.toLowerCase()) || product.desc.toLowerCase().includes(searchText.toLowerCase()):true)
-        .filter(product=>product.category == selectedCategory.id && product.subCategory == selectedSubCategory.id)
+        .filter(product=>product.category === selectedCategory.id && product.subCategory === selectedSubCategory.id)
         .map(product=>{
             return (
               <div key={product.id} className="card">

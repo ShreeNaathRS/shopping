@@ -8,11 +8,11 @@ const ShopFilterSubCategory = ({ selectedCategory, selectedSubCategory, setSelec
         const localCategoryFilter = JSON.parse(localStorage.getItem("localCategoryFilter"))
         setSelectedSubCategory(localSubCategoryFilter?.value ? localSubCategoryFilter?.value : null)
         setSelectedCategory(localCategoryFilter?.value ? localCategoryFilter?.value : null)
-    }, [])
+    })
     useEffect(() => {
         if(selectedCategory && selectedSubCategory && Object.keys(selectedCategory).length !== 0 && Object.keys(selectedSubCategory).length !== 0){
-            localStorage.setItem("localCategoryFilter", JSON.stringify({value: selectedCategory, expiry: (new Date).getTime()+1800000}))
-            localStorage.setItem("localSubCategoryFilter", JSON.stringify({value: selectedSubCategory, expiry: (new Date).getTime()+1800000}))
+            localStorage.setItem("localCategoryFilter", JSON.stringify({value: selectedCategory, expiry: new Date().getTime()+1800000}))
+            localStorage.setItem("localSubCategoryFilter", JSON.stringify({value: selectedSubCategory, expiry: new Date().getTime()+1800000}))
         }
     }, [selectedCategory, selectedSubCategory])
     const appDarkTheme = useSelector(state=>state.appDarkTheme)

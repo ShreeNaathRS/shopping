@@ -13,7 +13,7 @@ const HeaderLogo = () => {
   useEffect(()=>{
     window.addEventListener('online', ()=>setOnline(true))
     window.addEventListener('offline', ()=>setOnline(false))
-  }, [])
+  })
   return (
     <div className='header-logo'>
         <img alt='offline' src={online ? (appDarkTheme ? darkOnlineLogo : onlineLogo) : (appDarkTheme ? darkOfflineLogo : offlineLogo) } />
