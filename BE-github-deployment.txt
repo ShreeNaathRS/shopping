@@ -1,0 +1,36 @@
+ssh-keygen -t ed25519 -C "github-deploy" will generate .key and .key.pub
+
+gave error, since prev one was passocde encrypted. Use -N to skip passcode
+ssh-keygen -t ed25519 -C "github-deploy" -f ~/.ssh/github-deploy.key -N ""
+
+inside ec2
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM6CxSNN41kbHT87DxBXJ7wiVl+ha4m0GYR1QvsrfwTA github-deploy" >> ~/.ssh/authorized_keys
+where AAA is the .pub contents
+paste the contents of .key file in github repo's EC2_KEY
+
+
+
+which java command will print installed directory of java which is /usr/bin/java
+
+springboot-app.service file will allow us to start, stop, and restart it cleanly using systemctl.
+sudo nano /etc/systemd/system/springboot-app.service
+and paste
+[Unit]
+Description=Spring Boot Backend Service
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/products
+ExecStart=/usr/bin/java -jar /home/ubuntu/products/target/products-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl daemon-reload
+sudo systemctl enable springboot-app
+sudo systemctl status springboot-app
