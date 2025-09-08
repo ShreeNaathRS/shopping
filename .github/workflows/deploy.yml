@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - master
+      - development
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      REACT_APP_API_URL: ${{ github.ref == 'refs/heads/master' && secrets.PROD_API_URL || secrets.DEV_API_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
