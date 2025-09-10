@@ -1,20 +1,7 @@
-import { useEffect } from 'react'
 import './shopFilterSubCategory.css'
 import { useSelector } from 'react-redux'
 
-const ShopFilterSubCategory = ({ selectedCategory, selectedSubCategory, setSelectedCategory, setSelectedSubCategory }) => {
-    useEffect(()=>{
-        const localSubCategoryFilter = JSON.parse(localStorage.getItem("localSubCategoryFilter"))
-        const localCategoryFilter = JSON.parse(localStorage.getItem("localCategoryFilter"))
-        setSelectedSubCategory(localSubCategoryFilter?.value ? localSubCategoryFilter?.value : null)
-        setSelectedCategory(localCategoryFilter?.value ? localCategoryFilter?.value : null)
-    })
-    useEffect(() => {
-        if(selectedCategory && selectedSubCategory && Object.keys(selectedCategory).length !== 0 && Object.keys(selectedSubCategory).length !== 0){
-            localStorage.setItem("localCategoryFilter", JSON.stringify({value: selectedCategory, expiry: new Date().getTime()+1800000}))
-            localStorage.setItem("localSubCategoryFilter", JSON.stringify({value: selectedSubCategory, expiry: new Date().getTime()+1800000}))
-        }
-    }, [selectedCategory, selectedSubCategory])
+const ShopFilterSubCategory = ({ selectedCategory, selectedSubCategory, setSelectedSubCategory }) => {
     const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (
     <>
