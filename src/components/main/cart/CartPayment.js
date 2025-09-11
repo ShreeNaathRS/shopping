@@ -1,21 +1,56 @@
 import './cartPayment.css'
-
 import { useEffect, useState } from 'react'
+import { productAxios  } from "../../../service";
+import { useRazorpay } from 'react-razorpay';
 
 const CartPayment = ({ productCartSlice }) => {
     const [cartCount, setCartCount] = useState(0)
     const [sum, setSum] = useState(0)
+    const { Razorpay } = useRazorpay();
 
     useEffect(()=>{
-        if(productCartSlice){
         if(productCartSlice){
             let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
             setCartCount(count)
             let sum = productCartSlice.reduce((acc,curr)=>acc+(curr.qty*curr.price), 0)
             setSum(sum)
         }
-        }
     }, [productCartSlice])
+
+    const doPayment = async () =>{
+        try{
+            const postPayment = await productAxios.post('payment/create-order',{
+                amount: sum
+            })
+            const paymentData =  postPayment.data;
+            const options = {
+                key: "rzp_test_RGE8UNieYQNDVG",
+                amount: paymentData.amount,
+                currency: paymentData.currency,
+                name: "SwiftKart",
+                description: "Purchase!",
+                order_id: paymentData.id,
+                handler: (response) => {
+                    console.log("Payment Success:", response);
+                },
+                prefill: {
+                    name: "Test User",
+                    email: "test@example.com",
+                    contact: "9999999999",
+                },
+                theme: {
+                    color: "#F37254",
+                },
+            };
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                console.error("Payment Failed:", response.error);
+            });
+            rzp.open();
+        } catch(err){
+            console.error(err)
+        }
+    }
 
     return (
             <div className="card cart-payment">
@@ -41,6 +76,12 @@ const CartPayment = ({ productCartSlice }) => {
                     <span>Sub Total ({cartCount} items)</span>
                     <span>Rs. {new Intl.NumberFormat('en-IN').format(sum)}</span>
                 </li>
+                <div className='cart-payment-actions'>
+                    <button type="button" className="payment-button btn btn-primary">Clear</button>
+                    <button type="button" className="payment-button btn btn-primary" onClick={()=>doPayment()}>
+                        Pay
+                    </button>
+                </div>
             </div>
     )
 }

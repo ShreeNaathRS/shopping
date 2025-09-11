@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './shop.css'
 import ShopFilter from './ShopFilter'
 import ShopList from './ShopList'
-import productAxios from '../../../service'
+import { productAxios } from '../../../service'
 import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
 
 const Shop = ({products, searchText}) => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from "react-redux";
 import { login } from "../../store/slices/loggedInUserSlice";
-import productAxios from '../../service';
+import { productAxios } from '../../service';
 
 export const HeaderLoginModal = () => {
     const dispatch = useDispatch();

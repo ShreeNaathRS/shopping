@@ -6,7 +6,7 @@ import Footer from './components/containers/Footer';
 import Header from './components/containers/Header';
 import Main from './components/containers/Main';
 import { useEffect, useRef, useState } from 'react';
-import productAxios from './service'
+import { productAxios } from './service'
 import { useSelector } from 'react-redux';
 
 function App() {

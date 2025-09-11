@@ -19,3 +19,14 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.cart-payment-actions{
+    display: flex;
+    flex-direction: row;
+    margin: 0 5px 0 5px;
+    gap: 5px;
+    justify-content: space-evenly;
+    .payment-button{
+        width: 50%;
+    }
+}
