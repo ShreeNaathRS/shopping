@@ -37,10 +37,13 @@ const counterSlice = createSlice({
                 return newState
             } 
             return state
+        },
+        clearCart: ()=>{
+            return initialState
         }
     }
 })
 
-export const { add, remove } = counterSlice.actions
+export const { add, remove, clearCart } = counterSlice.actions
 const productCartReducer = counterSlice.reducer
 export default productCartReducer

@@ -1,0 +1,8 @@
+.confirm-button-action{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    button{
+        width: 75px;
+    }
+}

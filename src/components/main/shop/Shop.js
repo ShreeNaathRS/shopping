@@ -4,8 +4,10 @@ import ShopFilter from './ShopFilter'
 import ShopList from './ShopList'
 import { productAxios } from '../../../service'
 import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
+import CenteredIndicator from '../../common/CenteredIndicator'
+import { EMPTY_PRODUCTS } from '../../../constants'
 
-const Shop = ({products, searchText}) => {
+const Shop = ({products, productsLoading, searchText}) => {
   const {
     selectedCategory, setSelectedCategory,
     selectedSubCategory, setSelectedSubCategory
@@ -32,7 +34,12 @@ const Shop = ({products, searchText}) => {
   return (
     <div className='shop'>
       <ShopFilter categories={categories} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} setSelectedCategory={setSelectedCategory} setSelectedSubCategory={setSelectedSubCategory}/>
-      <ShopList products={products} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} searchText={searchText} />
+      { productsLoading? 
+          <CenteredIndicator loader={true}/>:
+          products?
+          <ShopList products={products} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} searchText={searchText} />:
+          <CenteredIndicator message={EMPTY_PRODUCTS}/>
+      }
     </div>
   )
 }
