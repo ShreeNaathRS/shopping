@@ -10,7 +10,7 @@ const ShopList = ({ products, selectedCategory, selectedSubCategory, searchText 
     useEffect(()=>{
       setFilteredProducts(products.filter(product=>searchText?product.company.toLowerCase().includes(searchText.toLowerCase()) || product.desc.toLowerCase().includes(searchText.toLowerCase()):true)
         .filter(product=>product.category === selectedCategory.id && product.subCategory === selectedSubCategory.id))
-    },[selectedCategory, selectedSubCategory, searchText])
+    },[selectedCategory, selectedSubCategory, searchText, products])
     return (
     <div className='shop-list'>
         { 
