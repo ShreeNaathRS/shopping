@@ -1,23 +1,61 @@
 import './cartPayment.css'
-
 import { useEffect, useState } from 'react'
+import { productAxios  } from "../../../service";
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart } from '../../../store/slices/productCartSlice';
+import ConfirmModal from '../../common/ConfirmModal';
+import { CART_CLEAR_CONFIRMATION } from '../../../constants';
+import { usePayment } from '../../../hooks/usePayment';
 
 const CartPayment = ({ productCartSlice }) => {
     const [cartCount, setCartCount] = useState(0)
     const [sum, setSum] = useState(0)
+    const dispatch = useDispatch()
+    const { doPayment } = usePayment()
+    const { userId } = useSelector(state=>state.loggedInUser)
 
     useEffect(()=>{
-        if(productCartSlice){
         if(productCartSlice){
             let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
             setCartCount(count)
             let sum = productCartSlice.reduce((acc,curr)=>acc+(curr.qty*curr.price), 0)
             setSum(sum)
         }
-        }
     }, [productCartSlice])
 
+    const createOrder = async () => {
+        const response = await productAxios.post('payment/create-order',{
+            amount: sum
+        })
+        doPayment({responseData: response.data, successHandler, failureHandler})
+    }
+
+    const successHandler = async data => {
+        const {receiptId, paymentId, signature} = data;
+        try{
+            await productAxios.post('/orders',{
+                user: userId,
+                receiptId,
+                paymentId,
+                signature,
+                products: productCartSlice.map(prd=>{
+                    return {
+                        product:{id:prd.id}, qty:prd.qty, amt:prd.qty*prd.price
+                    }
+                })
+            });
+            dispatch(clearCart())
+        } catch(err){
+            console.error(err)
+        }
+    }
+
+    const failureHandler = err => {
+        console.log('fail', err)
+    }
+
     return (
+        cartCount>0?
             <div className="card cart-payment">
                 <h5 className='card-title'>Cart Summary</h5>
                 <ul className="list-group list-group-flush scrollable-list">
@@ -26,22 +64,32 @@ const CartPayment = ({ productCartSlice }) => {
                         return (
                         
                         <li className="list-group-item">
-                            <span className='fw-bold'>{product.company.substring(0,10)+(product.company.length>10?"...":"")}</span> &nbsp;
-                            <span>{product.desc.substring(0,10)+(product.desc.length>10?"...":"")}</span><br />
-                            <div className='cart-total'>
-                            <span>Rs. {new Intl.NumberFormat('en-IN').format(product.price)} x {product.qty}</span>
-                            <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(product.price*product.qty)}</span>
+                            <div className='cart-summary-item'>
+                                <span className='fw-bold'>{product.company}</span>
+                                <span>{product.desc.substring(0,50)+(product.desc.length>50?"...":"")}</span>
+                                <div className='cart-total'>
+                                    <span>Rs. {new Intl.NumberFormat('en-IN').format(product.price)} x {product.qty}</span>
+                                    <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(product.price*product.qty)}</span>
+                                </div>
                             </div>
                         </li>
                         )
                     })
                     }
                 </ul>
-                <li className="list-group list-group-item cart-total fw-bold">
+                <li className="list-group list-group-item cart-sub-total fw-bold">
                     <span>Sub Total ({cartCount} items)</span>
                     <span>Rs. {new Intl.NumberFormat('en-IN').format(sum)}</span>
                 </li>
-            </div>
+                <div className='cart-payment-actions'>
+                    <button type="button" className="payment-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#clearCartModal">Clear</button>
+                    <ConfirmModal id='clearCartModal' message={CART_CLEAR_CONFIRMATION} onConfirmation={()=>dispatch(clearCart())}/>
+                    <button type="button" className="payment-button btn btn-primary" onClick={()=>createOrder()}>
+                        Pay
+                    </button>
+                </div>
+            </div>:
+        ""
     )
 }
 

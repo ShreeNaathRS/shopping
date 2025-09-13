@@ -14,8 +14,44 @@
     overflow-y: auto;
 }
 
-.cart-total{
+.cart-sub-total{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.cart-total{
+    display: flex;
+    flex-direction: row;
+}
+
+.cart-payment-actions{
+    display: flex;
+    flex-direction: row;
+    margin: 0 5px 0 5px;
+    gap: 5px;
+    justify-content: space-evenly;
+    .payment-button{
+        width: 50%;
+    }
+}
+
+.cart-summary-item{
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    .cart-payment-actions,.cart-total,.cart-sub-total{
+        flex-direction: column;
+        .payment-button{
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and (max-width: 896px) and (orientation: landscape) {
+    .cart-total,.cart-sub-total{
+        flex-direction: column;
+    }
 }
