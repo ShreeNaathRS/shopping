@@ -24,8 +24,8 @@ export const HeaderLoginModal = () => {
                 password
                 }
             })
-            const { name, roles, token } = response.data;
-            dispatch(login({ name, roles, token }))
+            const { userId, name, roles, token } = response.data;
+            dispatch(login({ userId, name, roles, token }))
         }catch(err){
             console.error(err)
         }
@@ -36,10 +36,10 @@ export const HeaderLoginModal = () => {
             Login
         </button>
         <div className="modal fade" id="loginModal" tabIndex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
+            <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="loginModalLabel">Login</h1>
+                        <h1 className="modal-title fs-5" id="loginModalLabel">SwiftKart Login</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">

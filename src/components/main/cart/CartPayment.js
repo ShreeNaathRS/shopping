@@ -1,17 +1,18 @@
 import './cartPayment.css'
 import { useEffect, useState } from 'react'
 import { productAxios  } from "../../../service";
-import { useRazorpay } from 'react-razorpay';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../../../store/slices/productCartSlice';
 import ConfirmModal from '../../common/ConfirmModal';
 import { CART_CLEAR_CONFIRMATION } from '../../../constants';
+import { usePayment } from '../../../hooks/usePayment';
 
 const CartPayment = ({ productCartSlice }) => {
     const [cartCount, setCartCount] = useState(0)
     const [sum, setSum] = useState(0)
-    const { Razorpay } = useRazorpay();
     const dispatch = useDispatch()
+    const { doPayment } = usePayment()
+    const { userId } = useSelector(state=>state.loggedInUser)
 
     useEffect(()=>{
         if(productCartSlice){
@@ -22,39 +23,35 @@ const CartPayment = ({ productCartSlice }) => {
         }
     }, [productCartSlice])
 
-    const doPayment = async () =>{
+    const createOrder = async () => {
+        const response = await productAxios.post('payment/create-order',{
+            amount: sum
+        })
+        doPayment({responseData: response.data, successHandler, failureHandler})
+    }
+
+    const successHandler = async data => {
+        const {receiptId, paymentId, signature} = data;
         try{
-            const postPayment = await productAxios.post('payment/create-order',{
-                amount: sum
-            })
-            const paymentData =  postPayment.data;
-            const options = {
-                key: "rzp_test_RGE8UNieYQNDVG",
-                amount: paymentData.amount,
-                currency: paymentData.currency,
-                name: "SwiftKart",
-                description: "Purchase!",
-                order_id: paymentData.id,
-                handler: (response) => {
-                    console.log("Payment Success:", response);
-                },
-                prefill: {
-                    name: "Test User",
-                    email: "test@example.com",
-                    contact: "9999999999",
-                },
-                theme: {
-                    color: "#F37254",
-                },
-            };
-            const rzp = new Razorpay(options);
-            rzp.on('payment.failed', function (response) {
-                console.error("Payment Failed:", response.error);
+            const orderResponse = await productAxios.post('/orders',{
+                user: userId,
+                receiptId,
+                paymentId,
+                signature,
+                products: productCartSlice.map(prd=>{
+                    return {
+                        product:{id:prd.id}, qty:prd.qty, amt:prd.qty*prd.price
+                    }
+                })
             });
-            rzp.open();
+            dispatch(clearCart())
         } catch(err){
             console.error(err)
         }
+    }
+
+    const failureHandler = err => {
+        console.log('fail', err)
     }
 
     return (
@@ -87,7 +84,7 @@ const CartPayment = ({ productCartSlice }) => {
                 <div className='cart-payment-actions'>
                     <button type="button" className="payment-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#clearCartModal">Clear</button>
                     <ConfirmModal id='clearCartModal' message={CART_CLEAR_CONFIRMATION} onConfirmation={()=>dispatch(clearCart())}/>
-                    <button type="button" className="payment-button btn btn-primary" onClick={()=>doPayment()}>
+                    <button type="button" className="payment-button btn btn-primary" onClick={()=>createOrder()}>
                         Pay
                     </button>
                 </div>
