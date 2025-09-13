@@ -20,6 +20,9 @@ function App() {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
   window.addEventListener('resize', setViewportHeight);
+  window.onerror = function(message, source, lineno, colno, error) {
+    alert(`Error: ${message} at ${source}:${lineno}:${colno}`);
+  };
 
   useEffect(()=>{
     if(hasFetched.current){
@@ -45,7 +48,7 @@ function App() {
   return (
     <div className={`app apply-theme ${appDarkTheme? 'dark': 'light'}`}>
       <Header setSearchText={setSearchText} />
-      <Main products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
+        <Main products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
       <Footer/>
     </div>
   );
