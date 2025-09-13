@@ -8,8 +8,10 @@ import { EMPTY_FILTERED_PRODUCTS, EMPTY_PRODUCTS_IN_CATEGORY } from '../../../co
 const ShopList = ({ products, selectedCategory, selectedSubCategory, searchText }) => {
     const [filteredProducts, setFilteredProducts] = useState([])
     useEffect(()=>{
-      setFilteredProducts(products.filter(product=>searchText?product.company.toLowerCase().includes(searchText.toLowerCase()) || product.desc.toLowerCase().includes(searchText.toLowerCase()):true)
-        .filter(product=>product.category === selectedCategory.id && product.subCategory === selectedSubCategory.id))
+      if(selectedCategory && selectedSubCategory){
+        setFilteredProducts(products.filter(product=>searchText?product.company.toLowerCase().includes(searchText.toLowerCase()) || product.desc.toLowerCase().includes(searchText.toLowerCase()):true)
+          .filter(product=>product.category === selectedCategory.id && product.subCategory === selectedSubCategory.id))
+      }
     },[selectedCategory, selectedSubCategory, searchText, products])
     return (
     <div className='shop-list'>
