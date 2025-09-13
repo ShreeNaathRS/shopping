@@ -33,7 +33,7 @@ const CartPayment = ({ productCartSlice }) => {
     const successHandler = async data => {
         const {receiptId, paymentId, signature} = data;
         try{
-            const orderResponse = await productAxios.post('/orders',{
+            await productAxios.post('/orders',{
                 user: userId,
                 receiptId,
                 paymentId,
