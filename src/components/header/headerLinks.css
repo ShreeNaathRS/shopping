@@ -23,6 +23,7 @@
 .link-badge{
     display: flex;
     flex-direction: row;
+    margin-top: 5px;
 }
 
 @media only screen and (max-width: 480px) and (orientation: portrait) {
@@ -36,4 +37,8 @@
     display: flex;
     flex-direction: row;
     gap: 0px;
+}
+
+.active{
+    color: red;
 }

@@ -1,28 +1,40 @@
 import './headerLinks.css'
 
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import HeaderProfile from './HeaderProfile';
 import { HeaderLoginModal } from "./HeaderLoginModal";
 
 const HeaderLinks = () => {
-    const tabs = [
-        { name: 'Home', route: '/home' },
-        { name: 'Shop', route: '/shop' },
-        { name: 'Cart', route: '/cart' }
-    ];
+    const tabs = useMemo(() => [
+        { name: 'Home', route: '/home', isActive: false },
+        { name: 'Shop', route: '/shop', isActive: false },
+        { name: 'Cart', route: '/cart', isActive: false }
+    ], []);
+    const location = useLocation()
     
-    const navigate = useNavigate();
     const [cartCount, setCartCount] = useState(0)
     const productCartSlice = useSelector(state=>state.productCartCounter)
     const [profileExpanded, setProfileExpanded] = useState(false)
     const {name} = useSelector(state=>state.loggedInUser)
+    
+    useEffect(()=>{
+        if(location){
+            tabs.forEach(tab=>{
+                if(tab.route===location.pathname){
+                    tab.isActive = true
+                } else{
+                    tab.isActive = false
+                }
+            })
+        }
+    }, [location, tabs])
 
     useEffect(()=>{
         if(productCartSlice){
-        let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
-        setCartCount(count)
+            let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
+            setCartCount(count)
         }
     }, [productCartSlice])
 
@@ -34,11 +46,11 @@ const HeaderLinks = () => {
                         return (
                             <div className='link-badge'>
                                 {tab.name !=='Cart'? 
-                                    <span key={tab.name} onClick={()=>navigate(tab.route)}>{tab.name}</span>: 
-                                    <span className='cartLink'>
-                                        <span key={tab.name} onClick={()=>navigate(tab.route)}>{tab.name}</span>
+                                    <NavLink to={tab.route} key={tab.name}>{tab.name}</NavLink>: 
+                                    <NavLink className="cartLink" to={tab.route} >
+                                        <span key={tab.name}>{tab.name}</span>
                                         {cartCount>0 && (<span className="badge bg-danger rounded-pill">{cartCount}</span>)}
-                                    </span>
+                                    </NavLink>
                                 }
                             </div>)
                         }

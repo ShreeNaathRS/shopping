@@ -6,7 +6,8 @@
     position: fixed;
     top: 8dvh;
     right: 1dvh;
-    background-color: lightblue;
+    background-color: var(--bg-color);
+    border: 1.5px solid #888888;
     border-radius: 5px;
 }
 

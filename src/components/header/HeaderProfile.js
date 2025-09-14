@@ -6,7 +6,7 @@ import { logout } from "../../store/slices/loggedInUserSlice";
 
 const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
     const popoverRef = useRef(null);
-    const {name} = useSelector(state=>state.loggedInUser)
+    const {name, email} = useSelector(state=>state.loggedInUser)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -38,6 +38,7 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
         <div ref={popoverRef} className="login-container" id="profilePopoverContent" style={{display: `${profileExpanded?'flex':'none'}`}}>
             <div className="text-center login" >
                 <p style={{fontWeight: 'bold'}}>Welcome, {name}</p>
+                <p style={{fontWeight: 'bold'}}>{email}</p>
                 <button style={{width: '70px', alignSelf: 'center', height: '25px', marginBottom: '5px', padding: '0'}} className="btn btn-sm btn-danger mt-2" onClick={()=>dispatch(logout())}>Logout</button>
             </div>
         </div>

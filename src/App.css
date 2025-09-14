@@ -17,6 +17,7 @@
   --text-color: #495057;
   --card-bg-color: #def9ff;
   --form-bg-color: #def9ff;
+  --nav-tabs-link-active-bg: #def9ff;
 }
 
 .dark{
@@ -24,6 +25,7 @@
   --text-color: lightblue;
   --card-bg-color: #0f3c79;
   --form-bg-color: #0f3c79;
+  --nav-tabs-link-active-bg: #0f3c79;
 }
 
 .apply-theme {
@@ -66,5 +68,18 @@
   }
   .selected-sub-category{
     background: var(--card-bg-color);
+  }
+  .nav-link{
+    border: none;
+    background-color: var(--bg-color) !important;
+    color: var(--text-color);
+    
+  }
+  .nav-link.active{
+    background-color: var(--nav-tabs-link-active-bg) !important;
+    font-weight: bolder;
+  }
+  .modal-header{
+    border-bottom: 0.5px solid #888888;
   }
 }

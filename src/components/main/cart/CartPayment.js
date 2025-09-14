@@ -84,7 +84,7 @@ const CartPayment = ({ productCartSlice }) => {
                 <div className='cart-payment-actions'>
                     <button type="button" className="payment-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#clearCartModal">Clear</button>
                     <ConfirmModal id='clearCartModal' message={CART_CLEAR_CONFIRMATION} onConfirmation={()=>dispatch(clearCart())}/>
-                    <button type="button" className="payment-button btn btn-primary" onClick={()=>createOrder()}>
+                    <button type="button" className={`payment-button btn btn-primary ${!userId?'disabled':''}`} onClick={()=>createOrder()}>
                         Pay
                     </button>
                 </div>
