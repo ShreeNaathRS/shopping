@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import HeaderProfile from './HeaderProfile';
-import { HeaderLoginModal } from "./HeaderLoginModal";
+import HeaderLoginSignupModal from './HeaderLoginSignupModal';
 
 const HeaderLinks = () => {
     const tabs = useMemo(() => [
@@ -58,7 +58,7 @@ const HeaderLinks = () => {
                 }
             </div>
             <div className='header-links-button'>
-                {name?<HeaderProfile profileExpanded={profileExpanded} setProfileExpanded={setProfileExpanded}/>:<HeaderLoginModal />}
+                {name?<HeaderProfile profileExpanded={profileExpanded} setProfileExpanded={setProfileExpanded}/>:<HeaderLoginSignupModal />}
             </div>
         </div>
     )

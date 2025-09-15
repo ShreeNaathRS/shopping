@@ -7,3 +7,5 @@ export const EMPTY_FILTERED_PRODUCTS = 'No items based on filters'
 export const EMPTY_CART = 'No items in cart'
 
 export const CART_CLEAR_CONFIRMATION = 'Are you sure you want to clear cart?'
+
+export const ERROR_SERVER = 'Server error. Please contact support!'
