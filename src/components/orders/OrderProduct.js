@@ -1,6 +1,6 @@
 import './orderProduct.css'
 
-const OrderProduct = ({ product }) => {
+export const OrderProduct = ({ product }) => {
     return (
         <div className="order-product-card">
             <img src={`https://swift-shopping-images.s3.ap-south-1.amazonaws.com${product.imageUrl}`} className="card-img-left" alt="..."/>

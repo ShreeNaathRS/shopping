@@ -18,6 +18,13 @@
   --card-bg-color: #def9ff;
   --form-bg-color: #def9ff;
   --nav-tabs-link-active-bg: #def9ff;
+  .active>.page-link{
+    background-color: #f0fcff;
+  }
+  .page-link{
+    --bs-body-bg: unset;
+    color: #495057;
+  }
   .order-table{
     --bs-table-color: #495057 !important;
     --bs-table-bg: #def9ff;
@@ -28,12 +35,36 @@
   }
 }
 
+.pagination{
+    margin-top: 5px;
+    --bs-pagination-padding-x: 0.4rem;
+    --bs-pagination-padding-y: 0.1rem;
+    --bs-pagination-font-size: .85rem;
+}
+
 .dark{
   --bg-color: #0a2851;
   --text-color: lightblue;
   --card-bg-color: #0f3c79;
   --form-bg-color: #0f3c79;
   --nav-tabs-link-active-bg: #0f3c79;
+  .page-link:hover{
+    --bs-pagination-hover-bg: #18427e;
+  }
+  #items-per-page{
+    background-color: #2a5691;
+  }
+  .active>.page-link{
+    background-color: #2a5691;
+  }
+  .page-link{
+    --bs-body-bg: unset;
+    color: lightblue;
+  }
+  .pagination{
+    --bs-pagination-disabled-bg: #666666;
+    --bs-pagination-bg: unset;
+  }
   .order-table{
     border: none;
     --bs-table-bg: #0f3c79;
@@ -43,6 +74,9 @@
     border: none;
     --bs-table-bg: #19498b;
     --bs-table-color: lightblue;
+  }
+  .loader{
+    color: lightblue !important;
   }
 }
 
