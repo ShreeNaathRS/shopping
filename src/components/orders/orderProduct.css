@@ -1,0 +1,16 @@
+.order-product-card{
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.order-product-card-body{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+td{
+    align-content: center;
+}

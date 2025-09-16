@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { Popover } from 'bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/loggedInUserSlice";
+import { NavLink } from 'react-router-dom';
 
 const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
     const popoverRef = useRef(null);
@@ -39,6 +40,7 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
             <div className="text-center login" >
                 <p style={{fontWeight: 'bold'}}>Welcome, {name}</p>
                 <p style={{fontWeight: 'bold'}}>{email}</p>
+                <NavLink to='/orders' key={'Orders'}>Orders</NavLink>
                 <button style={{width: '70px', alignSelf: 'center', height: '25px', marginBottom: '5px', padding: '0'}} className="btn btn-sm btn-danger mt-2" onClick={()=>dispatch(logout())}>Logout</button>
             </div>
         </div>

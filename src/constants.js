@@ -9,3 +9,7 @@ export const EMPTY_CART = 'No items in cart'
 export const CART_CLEAR_CONFIRMATION = 'Are you sure you want to clear cart?'
 
 export const ERROR_SERVER = 'Server error. Please contact support!'
+
+export const ORDER_TABLE_HEADER = ['#', 'Date', 'Receipt id', 'Payment id']
+
+export const ORDER_ROW_TABLE_HEADER = ['#', 'Product', 'Quantity', 'Amount']
