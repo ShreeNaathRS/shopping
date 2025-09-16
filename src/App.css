@@ -19,9 +19,11 @@
   --form-bg-color: #def9ff;
   --nav-tabs-link-active-bg: #def9ff;
   .order-table{
+    --bs-table-color: #495057 !important;
     --bs-table-bg: #def9ff;
   }
   .order-product-table{
+    --bs-table-color: #495057 !important;
     --bs-table-bg: #f0fcff;
   }
 }
@@ -33,12 +35,14 @@
   --form-bg-color: #0f3c79;
   --nav-tabs-link-active-bg: #0f3c79;
   .order-table{
-    --bs-table-bg: #0f3c79;
     border: none;
+    --bs-table-bg: #0f3c79;
+    --bs-table-color: lightblue;
   }
   .order-product-table{
     border: none;
     --bs-table-bg: #19498b;
+    --bs-table-color: lightblue;
   }
 }
 
