@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import './shop.css'
 import ShopFilter from './ShopFilter'
 import ShopList from './ShopList'
-import { productAxios } from '../../../service'
 import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_PRODUCTS } from '../../../constants'
+import { useAuthorizedAxios } from '../../../hooks/useAuthorizedAxios'
 
 const Shop = ({products, productsLoading, searchText}) => {
   const {
@@ -14,6 +14,7 @@ const Shop = ({products, productsLoading, searchText}) => {
   } = useCategoryFilter()
   const [categories, setCategories] = useState([])
   const hasFetched = useRef(false)
+  const { authorizedAxios } = useAuthorizedAxios();
 
   useEffect(()=>{
     if(hasFetched.current){
@@ -22,7 +23,7 @@ const Shop = ({products, productsLoading, searchText}) => {
     hasFetched.current = true
     const fetchCategories = async () => {
       try{
-        const response = await productAxios.get("/category");
+        const response = await authorizedAxios.get("/category");
         setCategories(response.data.filter(category=>category.name))
       }catch(err){
         console.log(err)

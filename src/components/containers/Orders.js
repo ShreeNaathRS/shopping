@@ -1,22 +1,24 @@
 import './orders.css'
 
 import { useEffect, useState } from 'react'
-import { productAxios } from '../../service'
 import { ORDER_ROW_TABLE_HEADER, ORDER_TABLE_HEADER } from '../../constants'
 import OrderTable from '../orders/OrderTable'
 import OrderTablePagination from '../orders/OrderTablePagination'
+import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios'
 
 const Orders = ({ userId }) => {
+
     const [responseData, setResponseData] = useState(null)
     const [itemsPerPage, setItemsPerPage] = useState(3)
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false)
+    const { authorizedAxios } = useAuthorizedAxios()
 
     useEffect(()=>{
         const getProducts = async () => {
             setLoading(true)
             try{
-                const response = await productAxios.get(`/orders/byUser/${userId}?page=${currentPage-1}&size=${itemsPerPage}&sort=createdAt,desc`)
+                const response = await authorizedAxios.get(`/orders/byUser/${userId}?page=${currentPage-1}&size=${itemsPerPage}&sort=createdAt,desc`)
                 setResponseData(response.data)
             } catch(err){
                 console.error(err)
@@ -25,7 +27,7 @@ const Orders = ({ userId }) => {
             }
         }
         getProducts()
-    }, [currentPage, userId, itemsPerPage])
+    }, [currentPage, userId, itemsPerPage, authorizedAxios])
 
     return (
         <div className='order-container'>

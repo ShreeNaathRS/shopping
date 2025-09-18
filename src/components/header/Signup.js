@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { productAxios } from '../../service';
 import { ERROR_SERVER } from '../../constants';
+import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios';
 
 const Signup = ({ closeDialog }) => {
     const emptySignupForm = { name: '', email:'', password: '', confirmPassword:'' }
     const [signupForm, setSignupForm] = useState(emptySignupForm);
     const [signupErrorMessage, setSignupErrorMessage] = useState('')
+    const { authorizedAxios } = useAuthorizedAxios()
 
     useEffect(()=>{
         const modalElement = document.getElementById('loginModal');
@@ -52,7 +53,7 @@ const Signup = ({ closeDialog }) => {
     }
 
     const doSignup = () => {
-        return productAxios.post('/login',
+        return authorizedAxios.post('/login',
             {
                 name: signupForm.name,
                 password: signupForm.password,

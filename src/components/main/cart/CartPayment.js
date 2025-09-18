@@ -1,11 +1,11 @@
 import './cartPayment.css'
 import { useEffect, useState } from 'react'
-import { productAxios  } from "../../../service";
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../../../store/slices/productCartSlice';
 import ConfirmModal from '../../common/ConfirmModal';
 import { CART_CLEAR_CONFIRMATION } from '../../../constants';
 import { usePayment } from '../../../hooks/usePayment';
+import { useAuthorizedAxios } from '../../../hooks/useAuthorizedAxios';
 
 const CartPayment = ({ productCartSlice }) => {
     const [cartCount, setCartCount] = useState(0)
@@ -13,6 +13,7 @@ const CartPayment = ({ productCartSlice }) => {
     const dispatch = useDispatch()
     const { doPayment } = usePayment()
     const { userId } = useSelector(state=>state.loggedInUser)
+    const { authorizedAxios } = useAuthorizedAxios();
 
     useEffect(()=>{
         if(productCartSlice){
@@ -24,7 +25,7 @@ const CartPayment = ({ productCartSlice }) => {
     }, [productCartSlice])
 
     const createOrder = async () => {
-        const response = await productAxios.post('payment/create-order',{
+        const response = await authorizedAxios.post('payment/create-order',{
             amount: sum
         })
         doPayment({responseData: response.data, successHandler, failureHandler})
@@ -33,7 +34,7 @@ const CartPayment = ({ productCartSlice }) => {
     const successHandler = async data => {
         const {receiptId, paymentId, signature} = data;
         try{
-            await productAxios.post('/orders',{
+            await authorizedAxios.post('/orders',{
                 user: userId,
                 receiptId,
                 paymentId,

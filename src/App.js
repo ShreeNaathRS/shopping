@@ -6,8 +6,8 @@ import Footer from './components/containers/Footer';
 import Header from './components/containers/Header';
 import Main from './components/containers/Main';
 import { useEffect, useRef, useState } from 'react';
-import { productAxios } from './service'
 import { useSelector } from 'react-redux';
+import { useAuthorizedAxios } from './hooks/useAuthorizedAxios';
 
 function App() {
 
@@ -15,6 +15,8 @@ function App() {
   const [searchText, setSearchText] = useState('')
   const [productsLoading, setProductsLoading] = useState(true)
   const hasFetched = useRef(false)
+  const { authorizedAxios } = useAuthorizedAxios()
+
   const setViewportHeight = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -30,7 +32,7 @@ function App() {
     const fetchProducts = async () => {
       setProductsLoading(true)
       try{
-        const response = (await productAxios.get("/products"));
+        const response = (await authorizedAxios.get("/products"));
         setProducts(response.data)
         setProductsLoading(false)
       }catch(err){

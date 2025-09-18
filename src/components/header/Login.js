@@ -1,14 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { login } from '../../store/slices/loggedInUserSlice';
 import { useDispatch } from 'react-redux';
-import { productAxios } from '../../service';
 import { ERROR_SERVER } from '../../constants';
+import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios';
+import { jwtDecode } from 'jwt-decode';
+import moment from 'moment';
 
 const Login = ({ closeDialog }) => {
     const dispatch = useDispatch();
     const emptyLoginForm = { name: '', password: ''}
-    const [loginForm, setLoginForm] = useState(emptyLoginForm);
-    const [loginErrorMessage, setLoginErrorMessage] = useState('')
+    const [ loginForm, setLoginForm ] = useState(emptyLoginForm);
+    const [ loginErrorMessage, setLoginErrorMessage ] = useState('')
+    const { authorizedAxios } = useAuthorizedAxios()
+    const [ loginInfo ] = useState(()=>{
+        const localStorageLoginInfo = localStorage.getItem('loginInfo')
+        return localStorageLoginInfo ? JSON.parse(localStorageLoginInfo): null
+    })
 
     useEffect(()=>{
         const modalElement = document.getElementById('loginModal');
@@ -19,6 +26,14 @@ const Login = ({ closeDialog }) => {
         modalElement?.addEventListener('hidden.bs.modal', hiddenEventHandler);
         return ()=>modalElement.removeEventListener('hidden.bs.modal',hiddenEventHandler)
     })
+
+    useLayoutEffect(()=>{
+        if(loginInfo?.exp && moment(loginInfo.exp).isAfter(moment())){
+            dispatch(login(loginInfo))
+        } else{
+            localStorage.removeItem('loginInfo')
+        }
+    }, [loginInfo, dispatch])
 
     const handleChange = e => {
         setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
@@ -35,8 +50,9 @@ const Login = ({ closeDialog }) => {
         try{
             const response = await doLogin()
             errorStatus = 0
-            const { userId, name, email, roles, token } = response.data;
-            dispatch(login({ userId, name, email, roles, token }))
+            const { token, ...otherLoginInfo } = response.data;
+            const exp = jwtDecode(token).exp * 1000
+            dispatch(login({ token, exp, ...otherLoginInfo }))
         } catch(err){
             errorStatus = err.status;
             console.error(err)
@@ -56,7 +72,7 @@ const Login = ({ closeDialog }) => {
     }
 
     const doLogin = () => {
-        return productAxios.get('/token',{
+        return authorizedAxios.get('/token',{
             params: {
                 username: loginForm.name,
                 password: loginForm.password

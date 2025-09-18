@@ -7,6 +7,7 @@ import Shop from '../main/shop/Shop';
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Orders from './Orders';
 import { useSelector } from 'react-redux';
+import AuthGuard from '../common/AuthGuard';
 
 const Main = ({products, productsLoading, searchText, setSearchText}) => {
   const { userId } = useSelector(state=>state.loggedInUser)
@@ -17,7 +18,12 @@ const Main = ({products, productsLoading, searchText, setSearchText}) => {
         <Route path='/home' Component={Home} />
         <Route path='/shop' element={<Shop products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>} />
         <Route path='/cart' Component={Cart} />
-        <Route path='/orders' element={<Orders  userId={userId}/>} />
+        <Route path='/orders' element={
+          <AuthGuard>
+            <Orders userId={userId}/>
+          </AuthGuard>
+          } 
+        />
       </Routes>
     </main>
   )

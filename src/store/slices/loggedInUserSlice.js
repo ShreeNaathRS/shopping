@@ -5,7 +5,8 @@ const initialState = {
     name: '',
     email: '',
     roles: [],
-    token: ''
+    token: '',
+    exp: null
 }
 
 const loggedInUserSlice = createSlice({
@@ -13,14 +14,10 @@ const loggedInUserSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            const { userId, name, email, roles, token } = action.payload
+            localStorage.setItem('loginInfo', JSON.stringify(action.payload))
             return {
                 ...state,
-                userId,
-                name,
-                email,
-                roles,
-                token
+                ...action.payload
             }
         },
         logout: () => initialState
