@@ -1,15 +1,36 @@
 import './headerProfile.css'
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Popover } from 'bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/loggedInUserSlice";
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps';
+import moment from 'moment';
+import { jwtDecode } from 'jwt-decode';
+import { sync } from '../../store/slices/productCartSlice';
 
 const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
     const popoverRef = useRef(null);
-    const {name, email} = useSelector(state=>state.loggedInUser)
+    const {name, email, token } = useSelector(state=>state.loggedInUser)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [ loginCartResponse, setLoginCartResponse] = useState(null)
+    const { doAPICall: getUserCart } = useAuthAxiosWithProps({ setResponse: setLoginCartResponse });
+
+    useEffect(() => {
+        if(token){
+            const isTokenValid = moment(jwtDecode(token).exp * 1000).isAfter(moment());
+            if (isTokenValid) {
+                getUserCart('GET', '/cart');
+            }
+        }
+    }, [token, getUserCart]);
+
+    useEffect(()=>{
+        if(loginCartResponse){
+            dispatch(sync(loginCartResponse))
+        }
+    }, [loginCartResponse, dispatch])
 
     useEffect(() => {
         const handleClickOutside = (event) => {

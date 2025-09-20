@@ -32,11 +32,11 @@ const HeaderLinks = () => {
     }, [location, tabs])
 
     useEffect(()=>{
-        if(productCartSlice){
-            let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
+        if(productCartSlice.products?.length){
+            let count = productCartSlice.products.reduce((acc,curr)=>acc+curr.qty, 0)
             setCartCount(count)
         }
-    }, [productCartSlice])
+    }, [productCartSlice.products])
 
     return (
         <div className='header-links-container'>

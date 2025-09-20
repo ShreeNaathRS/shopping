@@ -1,17 +1,26 @@
-import { useSelector } from "react-redux";
 import { productAxios } from "../service";
+import { store } from '../store/store'
 
 export const useAuthorizedAxios = () => {
-    const { token } = useSelector((state) => state.loggedInUser);
-    productAxios.interceptors.request.handlers = [];
+    
     productAxios.interceptors.request.use(
-        (config) => {
+        request => {
+            const token = store.getState().loggedInUser.token;
             if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
+                request.headers.Authorization = `Bearer ${token}`;
             }
-            return config;
+            return request;
         },
         (error) => Promise.reject(error)
+    );
+    productAxios.interceptors.response.use(
+        response => response,
+        (error) => {
+            if (error.response && error.response.status === 401) {
+                store.dispatch({ type: 'loggedInUser/logout' });
+            }
+            return Promise.reject(error);
+        }
     );
 
     return { authorizedAxios: productAxios };

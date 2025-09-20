@@ -26,7 +26,7 @@ const Shop = ({products, productsLoading, searchText}) => {
         const response = await authorizedAxios.get("/category");
         setCategories(response.data.filter(category=>category.name))
       }catch(err){
-        console.log(err)
+        console.err(err)
       }
     }
     fetchCategories()

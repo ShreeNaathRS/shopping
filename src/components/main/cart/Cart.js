@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 const Cart = () => {
   const productCartSlice = useSelector(state=>state.productCartCounter)
   return (
-    productCartSlice?.length?
+    productCartSlice.products?.length?
     <div className='cart'>
       <CartProducts productCartSlice={productCartSlice} />
       <CartPayment productCartSlice={productCartSlice} />

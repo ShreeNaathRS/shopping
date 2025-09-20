@@ -1,19 +1,29 @@
 import './productActions.css'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { add, remove } from '../../store/slices/productCartSlice'
+import { useSelector } from 'react-redux'
+import { useCartActions } from '../../hooks/useCartActions'
+import { useState } from 'react'
+import { SESSION_EXPIRED } from '../../constants'
 
 const ProductActions = ({ product }) => {
     const productCartSlice = useSelector(state=>state.productCartCounter)
-    const dispatch = useDispatch()
-    const getCount = (id, category, subCategory) => {
-        return productCartSlice?.find(product=>product.id === id && product.category === category && product.subCategory === subCategory)?.qty??0
+    const [cartUpdateLoader, setCartUpdateLoader] = useState(false)
+    const [cartUpdateErrorStatus, setCartUpdateErrorStatus] = useState(null)
+    const [cartUpdateErrorMessage, setCartUpdateErrorMessage] = useState(null)
+    const { handleSaveCart, handleRemoveCart } = useCartActions({ setCartUpdateLoader, setCartUpdateErrorStatus, setCartUpdateErrorMessage })
+
+    const getCount = (prd) => {
+        return productCartSlice?.products.find(cartProduct=>cartProduct.product.id === prd.id && cartProduct.product.category === prd.category && cartProduct.product.subCategory === prd.subCategory)?.qty??0
     }
+    
     return (
-        <div className='card-cart-actions'>
-            <i className={`bi bi-cart-dash fs-4 text-danger ${getCount(product.id, product.category, product.subCategory) === 0?'text-muted':''}`} onClick={()=>dispatch(remove(product))}></i>
-            <input className="form-control" type="text" value={getCount(product.id, product.category, product.subCategory)} readOnly/>
-            <i className="bi bi-cart-plus fs-4 text-primary add-color" onClick={()=>dispatch(add(product))}></i>
+        <div className='card-cart-actions-container'>
+            <div className='card-cart-actions'>
+                <i className={`bi bi-cart-dash fs-4 text-danger ${(getCount(product) === 0)||cartUpdateLoader?'text-muted':''}`} onClick={()=>!(getCount(product) === 0||cartUpdateLoader) && handleRemoveCart(product)}></i>
+                <input className="form-control" type="text" value={getCount(product)} readOnly/>
+                <i className={`bi bi-cart-plus fs-4 text-primary ${cartUpdateLoader?'text-muted':'add-color'}`} onClick={()=>!cartUpdateLoader && handleSaveCart(product)}></i>
+            </div>
+            {cartUpdateErrorMessage && <span className='error'>{`${(cartUpdateErrorStatus===401||cartUpdateErrorStatus===403)? SESSION_EXPIRED: cartUpdateErrorMessage}`}</span>}
         </div>
     )
 }

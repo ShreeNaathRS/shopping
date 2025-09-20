@@ -1,31 +1,35 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { login } from '../../store/slices/loggedInUserSlice';
 import { useDispatch } from 'react-redux';
-import { ERROR_SERVER } from '../../constants';
-import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios';
+import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps';
 import { jwtDecode } from 'jwt-decode';
 import moment from 'moment';
 
 const Login = ({ closeDialog }) => {
     const dispatch = useDispatch();
-    const emptyLoginForm = { name: '', password: ''}
+    const emptyLoginForm = useMemo(()=>{
+        return { name: '', password: ''}
+    },[])
     const [ loginForm, setLoginForm ] = useState(emptyLoginForm);
+    const [ loginResponse, setLoginResponse] = useState(null)
     const [ loginErrorMessage, setLoginErrorMessage ] = useState('')
-    const { authorizedAxios } = useAuthorizedAxios()
+    const { doAPICall: doLoginAPICall } = useAuthAxiosWithProps( { setResponse: setLoginResponse, setErrorMessage: setLoginErrorMessage } );
     const [ loginInfo ] = useState(()=>{
         const localStorageLoginInfo = localStorage.getItem('loginInfo')
         return localStorageLoginInfo ? JSON.parse(localStorageLoginInfo): null
     })
 
     useEffect(()=>{
-        const modalElement = document.getElementById('loginModal');
-        const hiddenEventHandler = ()=>{
-            setLoginForm(emptyLoginForm)
+        if(loginResponse){
+            const { token, ...otherLoginInfo } = loginResponse;
+            const exp = jwtDecode(token).exp * 1000
+            dispatch(login({ token, exp, ...otherLoginInfo }))
             setLoginErrorMessage('')
+            setLoginForm(emptyLoginForm)
+            closeDialog(loginResponse)
         }
-        modalElement?.addEventListener('hidden.bs.modal', hiddenEventHandler);
-        return ()=>modalElement.removeEventListener('hidden.bs.modal',hiddenEventHandler)
-    })
+    }, [loginResponse, dispatch, closeDialog, emptyLoginForm])
+
 
     useLayoutEffect(()=>{
         if(loginInfo?.exp && moment(loginInfo.exp).isAfter(moment())){
@@ -41,42 +45,14 @@ const Login = ({ closeDialog }) => {
 
     const submitLogin = async e => {
         e.preventDefault();
-        let errorStatus = 0
-        const loginForm = document.getElementById('loginForm');
-        if (!loginForm.checkValidity()) {
-            loginForm.reportValidity();
+        const loginFormElement = document.getElementById('loginForm');
+        if (!loginFormElement.checkValidity()) {
+            loginFormElement.reportValidity();
             return;
         }
-        try{
-            const response = await doLogin()
-            errorStatus = 0
-            const { token, ...otherLoginInfo } = response.data;
-            const exp = jwtDecode(token).exp * 1000
-            dispatch(login({ token, exp, ...otherLoginInfo }))
-        } catch(err){
-            errorStatus = err.status;
-            console.error(err)
-        } finally{
-            if(errorStatus===0){
-                setLoginErrorMessage('')
-                setLoginForm(emptyLoginForm)
-                closeDialog()
-            }
-            else if(errorStatus===403){
-                setLoginErrorMessage("Unsuccessful Authentication")
-            } 
-            else{
-                setLoginErrorMessage(ERROR_SERVER);
-            }
-        }
-    }
-
-    const doLogin = () => {
-        return authorizedAxios.get('/token',{
-            params: {
-                username: loginForm.name,
-                password: loginForm.password
-            }
+        await doLoginAPICall('GET', '/token', {
+            username: loginForm.name,
+            password: loginForm.password
         })
     }
 

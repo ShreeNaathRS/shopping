@@ -21,7 +21,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                 <tbody>
                     {!loading && responseData?.length?  responseData.map((order, index) => {
                         const orderTotal=order.products.reduce((acc, curr)=>{
-                        return acc+=curr.qty * curr.amt 
+                        return acc+=curr.qty * curr.price 
                         },0);
                         return (<Fragment key={index}>
                             <tr onClick={() => toggleRow(index)} style={{ cursor: 'pointer' }}>
@@ -49,7 +49,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                                                             <OrderProduct product={orderProduct.product} />
                                                         </td>
                                                         <td>{orderProduct.qty}</td>
-                                                        <td>{orderProduct.amt}</td>
+                                                        <td>{orderProduct.price}</td>
                                                     </tr>
                                                 )
                                             }

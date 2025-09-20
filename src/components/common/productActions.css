@@ -1,9 +1,19 @@
+.card-cart-actions-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .card-cart-actions{
     display: flex;
-    flex-flow: row wrap;
+    flex-direction: row;
     justify-content: space-evenly;
     .form-control{
         width: 17%;
         text-align: center;
     }
+}
+
+.error{
+    color: red;
 }

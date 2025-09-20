@@ -5,6 +5,7 @@ import { clearCart } from '../../../store/slices/productCartSlice';
 import ConfirmModal from '../../common/ConfirmModal';
 import { CART_CLEAR_CONFIRMATION } from '../../../constants';
 import { usePayment } from '../../../hooks/usePayment';
+import { useAuthAxiosWithProps } from '../../../hooks/useAuthAxiosWithProps';
 import { useAuthorizedAxios } from '../../../hooks/useAuthorizedAxios';
 
 const CartPayment = ({ productCartSlice }) => {
@@ -13,16 +14,36 @@ const CartPayment = ({ productCartSlice }) => {
     const dispatch = useDispatch()
     const { doPayment } = usePayment()
     const { userId } = useSelector(state=>state.loggedInUser)
-    const { authorizedAxios } = useAuthorizedAxios();
+    const [orderResponse, setOrderResponse] = useState(null)
+    const { doAPICall: placeOrder } = useAuthAxiosWithProps({
+        setResponse: setOrderResponse
+    });
+    const [deleteCartResopnse, setDeleteCartResponse] = useState(null)
+    const { doAPICall: deleteCart } = useAuthAxiosWithProps({
+        setResponse: setDeleteCartResponse
+    });
+    const {authorizedAxios} = useAuthorizedAxios()
 
     useEffect(()=>{
-        if(productCartSlice){
-            let count = productCartSlice.reduce((acc,curr)=>acc+curr.qty, 0)
+        if(productCartSlice?.products){
+            let count = productCartSlice.products.reduce((acc,curr)=>acc+curr.qty, 0)
             setCartCount(count)
-            let sum = productCartSlice.reduce((acc,curr)=>acc+(curr.qty*curr.price), 0)
+            let sum = productCartSlice.products.reduce((acc,curr)=>acc+(curr.qty*curr.price), 0)
             setSum(sum)
         }
-    }, [productCartSlice])
+    }, [productCartSlice.products])
+
+    useEffect(()=>{
+        if(orderResponse){
+            deleteCart('DELETE', '/cart')
+        }
+    }, [orderResponse, deleteCart])
+
+    useEffect(()=>{
+        if(deleteCartResopnse){
+            dispatch(clearCart())
+        }
+    },[deleteCartResopnse, dispatch])
 
     const createOrder = async () => {
         const response = await authorizedAxios.post('payment/create-order',{
@@ -33,26 +54,22 @@ const CartPayment = ({ productCartSlice }) => {
 
     const successHandler = async data => {
         const {receiptId, paymentId, signature} = data;
-        try{
-            await authorizedAxios.post('/orders',{
-                user: userId,
-                receiptId,
-                paymentId,
-                signature,
-                products: productCartSlice.map(prd=>{
-                    return {
-                        product:{id:prd.id}, qty:prd.qty, amt:prd.qty*prd.price
-                    }
-                })
-            });
-            dispatch(clearCart())
-        } catch(err){
-            console.error(err)
+        const params = {
+            user: userId,
+            receiptId,
+            paymentId,
+            signature,
+            products: productCartSlice.products.map(prd=>{
+                return {
+                    product:{id:prd.id}, qty:prd.qty, price:prd.qty*prd.price
+                }
+            })
         }
+        placeOrder('POST', '/orders', params)
     }
 
     const failureHandler = err => {
-        console.log('fail', err)
+        console.err('fail', err)
     }
 
     return (
@@ -61,16 +78,16 @@ const CartPayment = ({ productCartSlice }) => {
                 <h5 className='card-title'>Cart Summary</h5>
                 <ul className="list-group list-group-flush scrollable-list">
                     {
-                    productCartSlice && productCartSlice.map(product=>{
+                    productCartSlice.products?.length && productCartSlice.products.map(cartProduct=>{
                         return (
                         
                         <li className="list-group-item">
                             <div className='cart-summary-item'>
-                                <span className='fw-bold'>{product.company}</span>
-                                <span>{product.desc.substring(0,50)+(product.desc.length>50?"...":"")}</span>
+                                <span className='fw-bold'>{cartProduct.product.company}</span>
+                                <span>{cartProduct.product.desc.substring(0,50)+(cartProduct.product.desc.length>50?"...":"")}</span>
                                 <div className='cart-total'>
-                                    <span>Rs. {new Intl.NumberFormat('en-IN').format(product.price)} x {product.qty}</span>
-                                    <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(product.price*product.qty)}</span>
+                                    <span>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price)} x {cartProduct.product.qty}</span>
+                                    <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price*cartProduct.product.qty)}</span>
                                 </div>
                             </div>
                         </li>

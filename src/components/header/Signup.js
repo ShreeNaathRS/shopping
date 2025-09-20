@@ -31,9 +31,8 @@ const Signup = ({ closeDialog }) => {
             return;
         }
         try{
-            const response = await doSignup()
+            await doSignup()
             errorStatus = 0
-            console.log(response)
         } catch(err){
             errorStatus=err.status;
             console.error(err)
