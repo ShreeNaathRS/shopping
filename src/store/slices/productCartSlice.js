@@ -14,12 +14,7 @@ const counterSlice = createSlice({
         sync: (state, action)=>{
             return action.payload
         },
-        clearCart: state=>{
-            return {
-                ...state,
-                products: []
-            }
-        }
+        clearCart: ()=>initialState
     }
 })
 

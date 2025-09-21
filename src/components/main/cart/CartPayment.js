@@ -18,9 +18,9 @@ const CartPayment = ({ productCartSlice }) => {
     const { doAPICall: placeOrder } = useAuthAxiosWithProps({
         setResponse: setOrderResponse
     });
-    const [deleteCartResopnse, setDeleteCartResponse] = useState(null)
+    const [deleteCartId, setDeleteCartId] = useState(null)
     const { doAPICall: deleteCart } = useAuthAxiosWithProps({
-        setResponse: setDeleteCartResponse
+        setResponse: setDeleteCartId
     });
     const {authorizedAxios} = useAuthorizedAxios()
 
@@ -40,10 +40,10 @@ const CartPayment = ({ productCartSlice }) => {
     }, [orderResponse, deleteCart])
 
     useEffect(()=>{
-        if(deleteCartResopnse){
+        if(deleteCartId > 0){
             dispatch(clearCart())
         }
-    },[deleteCartResopnse, dispatch])
+    },[deleteCartId, dispatch])
 
     const createOrder = async () => {
         const response = await authorizedAxios.post('payment/create-order',{
@@ -101,7 +101,7 @@ const CartPayment = ({ productCartSlice }) => {
                 </li>
                 <div className='cart-payment-actions'>
                     <button type="button" className="payment-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#clearCartModal">Clear</button>
-                    <ConfirmModal id='clearCartModal' message={CART_CLEAR_CONFIRMATION} onConfirmation={()=>dispatch(clearCart())}/>
+                    <ConfirmModal id='clearCartModal' message={CART_CLEAR_CONFIRMATION} onConfirmation={()=>deleteCart('DELETE', '/cart')}/>
                     <button type="button" className={`payment-button btn btn-primary ${!userId?'disabled':''}`} onClick={()=>createOrder()}>
                         Pay
                     </button>

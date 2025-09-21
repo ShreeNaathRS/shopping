@@ -32,7 +32,7 @@ const HeaderLinks = () => {
     }, [location, tabs])
 
     useEffect(()=>{
-        if(productCartSlice.products?.length){
+        if(productCartSlice.products){
             let count = productCartSlice.products.reduce((acc,curr)=>acc+curr.qty, 0)
             setCartCount(count)
         }
