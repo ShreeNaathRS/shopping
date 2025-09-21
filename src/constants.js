@@ -13,7 +13,7 @@ export const ERROR_SERVER = 'Server error!'
 export const ORDER_TABLE_HEADER = [
     { title: '#', sortable: false},
     { title: 'Date', sortable: true, sortingName: 'createdAt', sortOrder: 'desc'},
-    { title: 'Amount', sortable: true, sortingName: 'amt', sortOrder: 'desc'},
+    { title: 'Amount', sortable: true, sortingName: 'amt', sortOrder: 'desc', minWidth:'100px'},
     { title: 'Receipt id', sortable: false},
     { title: 'Payment id', sortable: false}
 ]

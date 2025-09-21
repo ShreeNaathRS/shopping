@@ -23,7 +23,7 @@ const OrderTablePagination = ({ itemsPerPage, setItemsPerPage, currentPage, setC
             {
                 response?.data &&
                 <div className='order-pagination-container'>
-                    <div className="d-flex justify-content-end align-items-center mb-3">
+                    <div className="d-flex justify-content-end align-items-center">
                         <label htmlFor="itemsPerPage" className="fw-bold me-2">Items:</label>
                         <select
                             id="itemsPerPage"

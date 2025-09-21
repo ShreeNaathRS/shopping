@@ -42,7 +42,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                     <tr>
                         {
                             header?.map((header, index)=>
-                                <th style={{position:'sticky', top: '0'}} scope="col">
+                                <th style={{position:'sticky', top: '0', minWidth: header.minWidth}} scope="col">
                                     {header.title}
                                     {header.sortable && <span onClick={()=>toggleSort(index)}>{header.sortOrder==='desc'?<i class="bi bi-caret-down-fill"></i>:<i class="bi bi-caret-up-fill"></i>}</span>}
                                 </th>
@@ -55,7 +55,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                         return (<Fragment key={index}>
                             <tr onClick={() => toggleRow(index)} style={{ cursor: 'pointer' }}>
                                 <td>{(index+1)+(itemsPerPage*(currentPage-1))}</td>
-                                <td>{moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                <td>{moment(order.createdAt).format('YYYY-MM-DD')}</td>
                                 <td>Rs. {new Intl.NumberFormat('en-IN').format(order.amt)}</td>
                                 <td>{order.receiptId}</td>
                                 <td>{order.paymentId}</td>
