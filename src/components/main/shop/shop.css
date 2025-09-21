@@ -4,7 +4,13 @@
     max-height: 85dvh;
     padding: 0px 5px 0px 5px;
     gap: 15px;
-    @media only screen and (max-width: 768px) and (orientation: landscape){
+    @media only screen and (max-height: 400px) and (orientation: landscape){
+        max-height: 80dvh;
+    }
+    @media only screen and (max-height: 300px) and (orientation: landscape){
+        max-height: 78dvh;
+    }
+    @media only screen and (max-width: 896px) and (orientation: landscape){
         max-height: 80dvh;
     }
 }
