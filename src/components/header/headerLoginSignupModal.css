@@ -2,6 +2,10 @@
     padding-top: 10px;
 }
 
+#loginSignupTab{
+    border: none;
+}
+
 form{
     display: flex;
     flex-direction: column;
