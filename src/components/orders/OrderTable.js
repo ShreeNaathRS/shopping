@@ -1,39 +1,68 @@
 import { Fragment } from "react/jsx-runtime";
 import { OrderProduct } from "./OrderProduct";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import CenteredIndicator from "../common/CenteredIndicator";
 import { NO_ORDERS } from "../../constants";
 
-export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage, currentPage, loading } ) => {
+export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage, currentPage, loading, setSortString } ) => {
+    const [header, setHeader] = useState(null)
     const [expandedRow, setExpandedRow] = useState(null);
     const toggleRow = index => {
         setExpandedRow(prev => (prev === index ? null : index));
     };
+    useEffect(()=>{
+        if(mainHeader){
+            setHeader(mainHeader)
+        }
+    },[mainHeader])
+    const toggleSort = index => {
+        const head = header[index]
+        setSortString(`${head.sortingName},${head.sortOrder === 'desc'? 'asc': 'desc'}`)
+        setHeader(header?.map((header, headerIndex)=>
+            {
+                if(index===headerIndex){
+                    return {
+                        ...header,
+                        sortOrder: header.sortOrder === 'desc'? 'asc': 'desc'
+                    }
+                } else {
+                    return {
+                        ...header,
+                        sortOrder: 'desc'
+                    }
+                }
+            })
+        )
+    }
     return (
         <>
             <table className="table order-table">
                 <thead>
                     <tr>
-                        {mainHeader.map(header=><th style={{position:'sticky', top: '0'}} scope="col">{header}</th>)}
+                        {
+                            header?.map((header, index)=>
+                                <th style={{position:'sticky', top: '0'}} scope="col">
+                                    {header.title}
+                                    {header.sortable && <span onClick={()=>toggleSort(index)}>{header.sortOrder==='desc'?<i class="bi bi-caret-down-fill"></i>:<i class="bi bi-caret-up-fill"></i>}</span>}
+                                </th>
+                            )
+                        }
                     </tr>
                 </thead>
                 <tbody>
                     {!loading && responseData?.length?  responseData.map((order, index) => {
-                        const orderTotal=order.products.reduce((acc, curr)=>{
-                        return acc+=curr.qty * curr.price 
-                        },0);
                         return (<Fragment key={index}>
                             <tr onClick={() => toggleRow(index)} style={{ cursor: 'pointer' }}>
                                 <td>{(index+1)+(itemsPerPage*(currentPage-1))}</td>
-                                <td>{moment(order.createdAt).format('YYYY-MM-DD')}</td>
+                                <td>{moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                <td>Rs. {new Intl.NumberFormat('en-IN').format(order.amt)}</td>
                                 <td>{order.receiptId}</td>
                                 <td>{order.paymentId}</td>
-                                <td>Rs. {new Intl.NumberFormat('en-IN').format(orderTotal)}</td>
                             </tr>
                             {expandedRow === index && (
                             <tr>
-                                <td colSpan={mainHeader.length}>
+                                <td colSpan={header?.length}>
                                     <table className="table table-sm mb-0 order-product-table">
                                         <thead>
                                             <tr>
@@ -61,7 +90,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                         </Fragment>
                     )}):(!loading &&
                             (<tr>
-                                <td colSpan={mainHeader.length} className="text-center">
+                                <td colSpan={header?.length} className="text-center">
                                     {NO_ORDERS}
                                 </td>
                             </tr>)

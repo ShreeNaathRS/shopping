@@ -26,9 +26,9 @@ const CartPayment = ({ productCartSlice }) => {
 
     useEffect(()=>{
         if(productCartSlice?.products){
-            let count = productCartSlice.products.reduce((acc,curr)=>acc+curr.qty, 0)
+            let count = productCartSlice.products.reduce((acc,curr)=>acc+=curr.qty, 0)
             setCartCount(count)
-            let sum = productCartSlice.products.reduce((acc,curr)=>acc+(curr.qty*curr.price), 0)
+            let sum = productCartSlice.products.reduce((acc,curr)=>acc+=(curr.qty*curr.product.price), 0)
             setSum(sum)
         }
     }, [productCartSlice.products])
@@ -59,11 +59,14 @@ const CartPayment = ({ productCartSlice }) => {
             receiptId,
             paymentId,
             signature,
-            products: productCartSlice.products.map(prd=>{
+            products: productCartSlice.products.map(cartProduct=>{
                 return {
-                    product:{id:prd.id}, qty:prd.qty, price:prd.qty*prd.price
+                    qty: cartProduct.qty,
+                    price: cartProduct.price,
+                    product: cartProduct.product
                 }
-            })
+            }),
+            amt: productCartSlice.products.reduce((acc,curr)=>acc+=curr.price,0)
         }
         placeOrder('POST', '/orders', params)
     }
@@ -86,8 +89,8 @@ const CartPayment = ({ productCartSlice }) => {
                                 <span className='fw-bold'>{cartProduct.product.company}</span>
                                 <span>{cartProduct.product.desc.substring(0,50)+(cartProduct.product.desc.length>50?"...":"")}</span>
                                 <div className='cart-total'>
-                                    <span>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price)} x {cartProduct.product.qty}</span>
-                                    <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price*cartProduct.product.qty)}</span>
+                                    <span>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price)} x {cartProduct.qty}</span>
+                                    <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price*cartProduct.qty)}</span>
                                 </div>
                             </div>
                         </li>
