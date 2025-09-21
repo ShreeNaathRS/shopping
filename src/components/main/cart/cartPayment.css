@@ -41,6 +41,15 @@
     flex-direction: column;
 }
 
+.clip-two-lines{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
 @media only screen and (max-width: 480px) and (orientation: portrait) {
     .cart-payment-actions,.cart-total,.cart-sub-total{
         flex-direction: column;

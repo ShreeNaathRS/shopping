@@ -1,45 +1,73 @@
-.shop-list{
-    margin-top: 10px;
-    align-self: center;
-    display: flex;
-    flex-direction: row;
+.shop-items{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 10px;
-    flex: 1;
-    max-width: 85vw;
-    .card{
-        width: 20vw;
-        min-width: 200px;
+    place-items: center;
+    overflow-y: auto;
+}
+
+.shop-items *{
+    border-radius: 5px;
+}
+
+.shop-item{
+    background-color: var(--card-bg-color);
+    display: flex;
+    width: 250px;
+    border: 1px solid;
+    flex-direction: column;
+    img{
+        height: 200px;
+    }
+    @media only screen and (max-width: 480px) and (orientation: portrait){
+        width: 190px;
         img{
-            min-height: 250px;
+            height: 150px;
         }
-        .card-body{
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            .card-text{
-                max-height: 25px;
-                font-size: 14px;
-                clip-path: margin-box;
-            }
+        .form-control{
+            width: 22%;
         }
     }
+    @media only screen and (max-width: 768px) and (orientation: landscape){
+        width: 190px;
+        img{
+            height: 150px;
+        }
+        .form-control{
+            width: 22%;
+        }
+    }
+}
+
+.shop-item-title{
+    text-decoration: underline;
+}
+
+.shop-item-body{
+    display: flex;
+    flex-direction: column;
+}
+
+.shop-item-body-text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clip-two-lines{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
 }
 
 .price{
     margin: 0;
-}
-
-@media only screen and (max-width: 480px) and (orientation: portrait) {
-    .shop-list{
-        align-self: normal;
-        gap: 3px;
-    }
-}
-
-@media only screen and (max-width: 896px) and (orientation: landscape) {
-    .shop-list{
-        align-self: normal;
-        gap: 3px;
-    }   
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    width: 100%;
+    text-align: center;
 }

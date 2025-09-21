@@ -1,6 +1,10 @@
 .shop{
     display: flex;
     flex-direction: column;
-    max-height: 79dvh;
+    max-height: 85dvh;
     padding: 0px 5px 0px 5px;
+    gap: 15px;
+    @media only screen and (max-width: 768px) and (orientation: landscape){
+        max-height: 80dvh;
+    }
 }

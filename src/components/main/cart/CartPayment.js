@@ -87,7 +87,7 @@ const CartPayment = ({ productCartSlice }) => {
                         <li className="list-group-item">
                             <div className='cart-summary-item'>
                                 <span className='fw-bold'>{cartProduct.product.company}</span>
-                                <span>{cartProduct.product.desc.substring(0,50)+(cartProduct.product.desc.length>50?"...":"")}</span>
+                                <span className='clip-two-lines'>{cartProduct.product.desc}</span>
                                 <div className='cart-total'>
                                     <span>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price)} x {cartProduct.qty}</span>
                                     <span className='fw-bold'>Rs. {new Intl.NumberFormat('en-IN').format(cartProduct.product.price*cartProduct.qty)}</span>
