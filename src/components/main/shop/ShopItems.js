@@ -1,6 +1,5 @@
 import './shopItems.css'
 
-import ProductActions from '../../common/ProductActions'
 import { useEffect, useState } from 'react'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_FILTERED_PRODUCTS, EMPTY_PRODUCTS_IN_CATEGORY } from '../../../constants'
