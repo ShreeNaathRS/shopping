@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { login } from '../../store/slices/loggedInUserSlice';
 import { useDispatch } from 'react-redux';
 import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps';
@@ -7,10 +7,8 @@ import moment from 'moment';
 
 const Login = ({ closeDialog }) => {
     const dispatch = useDispatch();
-    const emptyLoginForm = useMemo(()=>{
-        return { name: '', password: ''}
-    },[])
-    const [ loginForm, setLoginForm ] = useState(emptyLoginForm);
+    const loginNameRef = useRef()
+    const loginPwdRef = useRef()
     const [ loginResponse, setLoginResponse] = useState(null)
     const [ loginErrorMessage, setLoginErrorMessage ] = useState('')
     const { doAPICall: doLoginAPICall } = useAuthAxiosWithProps( { setResponse: setLoginResponse, setErrorMessage: setLoginErrorMessage } );
@@ -25,10 +23,11 @@ const Login = ({ closeDialog }) => {
             const exp = jwtDecode(token).exp * 1000
             dispatch(login({ token, exp, ...otherLoginInfo }))
             setLoginErrorMessage('')
-            setLoginForm(emptyLoginForm)
+            loginNameRef.current.value = ''
+            loginPwdRef.current.value = ''
             closeDialog(loginResponse)
         }
-    }, [loginResponse, dispatch, closeDialog, emptyLoginForm])
+    }, [loginResponse, dispatch, closeDialog])
 
 
     useLayoutEffect(()=>{
@@ -39,10 +38,6 @@ const Login = ({ closeDialog }) => {
         }
     }, [loginInfo, dispatch])
 
-    const handleChange = e => {
-        setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
-    };
-
     const submitLogin = async e => {
         e.preventDefault();
         const loginFormElement = document.getElementById('loginForm');
@@ -51,18 +46,18 @@ const Login = ({ closeDialog }) => {
             return;
         }
         await doLoginAPICall('GET', '/token', {
-            username: loginForm.name,
-            password: loginForm.password
+            username: loginNameRef.current.value,
+            password: loginPwdRef.current.value
         })
     }
 
     return (
         <form onSubmit={submitLogin} id='loginForm'>
             <div className="input-group mb-3">
-                <input required name='name' type="text" className="form-control" placeholder="Name" value={loginForm.name} onChange={handleChange}/>
+                <input ref={loginNameRef} required name='name' type="text" className="form-control" placeholder="Name"/>
             </div>
             <div className="input-group mb-3">
-                <input required name='password' type="password" className="form-control" placeholder="Password" value={loginForm.password} onChange={handleChange}/>
+                <input ref={loginPwdRef} required name='password' type="password" className="form-control" placeholder="Password"/>
             </div>
             <button type="submit" className="btn btn-primary">Login</button>
             <span>{loginErrorMessage}</span>

@@ -1,29 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ERROR_SERVER } from '../../constants';
 import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios';
 
 const Signup = ({ closeDialog }) => {
-    const emptySignupForm = { name: '', email:'', password: '', confirmPassword:'' }
-    const [signupForm, setSignupForm] = useState(emptySignupForm);
+    const signUpNameRef = useRef()
+    const signUpEmailRef = useRef()
+    const signUpPwdRef = useRef()
+    const signUpConfirmPwdRef = useRef()
     const [signupErrorMessage, setSignupErrorMessage] = useState('')
     const { authorizedAxios } = useAuthorizedAxios()
 
     useEffect(()=>{
         const modalElement = document.getElementById('loginModal');
         const hiddenEvenHandler = ()=>{
-            setSignupForm(emptySignupForm)
+            signUpNameRef.current.value = ''
+            signUpEmailRef.current.value = ''
+            signUpPwdRef.current.value = ''
+            signUpConfirmPwdRef.current.value = ''
             setSignupErrorMessage('')
         }
         modalElement?.addEventListener('hidden.bs.modal', hiddenEvenHandler);
         return ()=>modalElement.removeEventListener('hidden.bs.modal', hiddenEvenHandler)
     })
 
-    const handleChange = e => {
-        setSignupForm({ ...signupForm, [e.target.name]: e.target.value });
-    };
-
     const submitSignup = async e => {
         e.preventDefault();
+        if(signUpPwdRef.current.value !== signUpConfirmPwdRef.current.value){
+            setSignupErrorMessage('Passwords not matching!')
+            return;
+        } else{
+            setSignupErrorMessage(null)
+        }
         let errorStatus = 0
         const signupForm = document.getElementById('signupForm');
         if (!signupForm.checkValidity()) {
@@ -39,7 +46,10 @@ const Signup = ({ closeDialog }) => {
         } finally{
             if(errorStatus===0){
                 setSignupErrorMessage('')
-                setSignupForm(emptySignupForm)
+                signUpNameRef.current.value = ''
+                signUpEmailRef.current.value = ''
+                signUpPwdRef.current.value = ''
+                signUpConfirmPwdRef.current.value = ''
                 closeDialog()
             }
             else if(errorStatus===409){
@@ -54,9 +64,9 @@ const Signup = ({ closeDialog }) => {
     const doSignup = () => {
         return authorizedAxios.post('/login',
             {
-                name: signupForm.name,
-                password: signupForm.password,
-                email: signupForm.email,
+                name: signUpNameRef.current.value,
+                password: signUpPwdRef.current.value,
+                email: signUpEmailRef.current.value,
                 roles: [{id:2}]
             }
         )
@@ -65,22 +75,20 @@ const Signup = ({ closeDialog }) => {
     return (
         <form onSubmit={submitSignup} id='signupForm'>
             <div className="input-group mb-3">
-                <input required name='name' type="text" className="form-control" placeholder="Name" value={signupForm.name} onChange={handleChange}/>
+                <input ref={signUpNameRef} required name='name' type="text" className="form-control" placeholder="Name" />
             </div>
             <div className="input-group mb-3">
-                <input required name='email' type="email" className="form-control" placeholder="Email" value={signupForm.email} onChange={handleChange}/>
+                <input ref={signUpEmailRef} required name='email' type="email" className="form-control" placeholder="Email" />
             </div>
             <div className="input-group mb-3">
-                <input required name='password' type="password" className="form-control" placeholder="Password" value={signupForm.password} onChange={handleChange}
+                <input ref={signUpPwdRef} required name='password' type="password" className="form-control" placeholder="Password"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
                     title="Must contain at least 8 characters, including uppercase, lowercase, number, and special character"
                     autoComplete="new-password"
                 />
             </div>
             <div className="input-group mb-3">
-                <input required name='confirmPassword' type="password" className="form-control" placeholder="Confirm password" value={signupForm.confirmPassword} onChange={handleChange}
-                    pattern={signupForm.password.toString()}
-                    title='Not matching with above password!'
+                <input ref={signUpConfirmPwdRef} required name='confirmPassword' type="password" className="form-control" placeholder="Confirm password"
                     autoComplete="new-password"
                 />
             </div>
