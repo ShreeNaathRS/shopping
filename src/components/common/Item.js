@@ -7,7 +7,7 @@ const Item = ({product}) => {
         <div className='item-img-container'>
             <img src={`https://swift-shopping-images.s3.ap-south-1.amazonaws.com${product.imageUrl}`} className="item-img-top" alt="..."/>
         </div>
-        <div>
+        <div className='item-body-container'>
             <div className="item-body">
             <div className='item-body-text'>
                 <p className="item-title fw-bold">{product.company}</p>

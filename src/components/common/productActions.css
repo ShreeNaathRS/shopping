@@ -9,6 +9,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     .form-control{
+        min-width: 40px;
         width: 17%;
         text-align: center;
     }

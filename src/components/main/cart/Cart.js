@@ -1,8 +1,8 @@
 import { EMPTY_CART } from '../../../constants'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import './cart.css'
+import CartItems from './Cartitems'
 import CartPayment from './CartPayment'
-import CartProducts from './CartProducts'
 
 import { useSelector } from 'react-redux'
 
@@ -11,7 +11,7 @@ const Cart = () => {
   return (
     productCartSlice.products?.length?
     <div className='cart'>
-      <CartProducts productCartSlice={productCartSlice} />
+      <CartItems productCartSlice={productCartSlice} />
       <CartPayment productCartSlice={productCartSlice} />
     </div>:
     <CenteredIndicator message={EMPTY_CART}/>

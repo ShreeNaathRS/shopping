@@ -1,7 +1,7 @@
 .cart-payment{
     display: flex;
     flex-direction: column;
-    width: 30dvw;
+    width: 40dvw;
     max-height: 100%;
 }
 
@@ -59,8 +59,14 @@
     }
 }
 
-@media only screen and (max-width: 896px) and (orientation: landscape) {
+@media only screen and (max-width: 950) and (orientation: landscape) {
     .cart-total,.cart-sub-total{
         flex-direction: column;
+    }
+}
+
+@media only screen  and (max-width: 1500) and (orientation: landscape) {
+    .cart-payment{
+        width: 45dvw;
     }
 }
