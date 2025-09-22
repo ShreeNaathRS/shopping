@@ -72,7 +72,7 @@ const CartPayment = ({ productCartSlice }) => {
     }
 
     const failureHandler = err => {
-        console.err('fail', err)
+        console.error('fail', err)
     }
 
     return (

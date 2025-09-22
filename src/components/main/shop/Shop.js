@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './shop.css'
 import ShopFilter from './ShopFilter'
-import ShopList from './ShopList'
+import ShopItems from './ShopItems'
 import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_PRODUCTS } from '../../../constants'
@@ -26,7 +26,7 @@ const Shop = ({products, productsLoading, searchText}) => {
         const response = await authorizedAxios.get("/category");
         setCategories(response.data.filter(category=>category.name))
       }catch(err){
-        console.err(err)
+        console.error(err)
       }
     }
     fetchCategories()
@@ -38,7 +38,7 @@ const Shop = ({products, productsLoading, searchText}) => {
       { productsLoading? 
           <CenteredIndicator loader={true}/>:
           products?
-          <ShopList products={products} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} searchText={searchText} />:
+          <ShopItems products={products} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} searchText={searchText} />:
           <CenteredIndicator message={EMPTY_PRODUCTS}/>
       }
     </div>
