@@ -5,7 +5,7 @@ import moment from "moment";
 import CenteredIndicator from "../common/CenteredIndicator";
 import { NO_ORDERS } from "../../constants";
 
-export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage, currentPage, loading, setSortString } ) => {
+export const OrderTable = ( { mainHeader, subHeader, responseData, loading, paginationParams, setPaginationParams } ) => {
     const [header, setHeader] = useState(null)
     const [expandedRow, setExpandedRow] = useState(null);
     const toggleRow = index => {
@@ -18,7 +18,12 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
     },[mainHeader])
     const toggleSort = index => {
         const head = header[index]
-        setSortString(`${head.sortingName},${head.sortOrder === 'desc'? 'asc': 'desc'}`)
+        setPaginationParams(prev=>{
+            return {
+                ...prev,
+                sortString: `${head.sortingName},${head.sortOrder === 'desc'? 'asc': 'desc'}`
+            }
+        })
         setHeader(header?.map((header, headerIndex)=>
             {
                 if(index===headerIndex){
@@ -54,7 +59,7 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, itemsPerPage,
                     {!loading && responseData?.length?  responseData.map((order, index) => {
                         return (<Fragment key={index}>
                             <tr onClick={() => toggleRow(index)} style={{ cursor: 'pointer' }}>
-                                <td>{(index+1)+(itemsPerPage*(currentPage-1))}</td>
+                                <td>{(index+1)+(paginationParams.itemsPerPage*(paginationParams.currentPage-1))}</td>
                                 <td>{moment(order.createdAt).format('YYYY-MM-DD')}</td>
                                 <td>Rs. {new Intl.NumberFormat('en-IN').format(order.amt)}</td>
                                 <td>{order.receiptId}</td>

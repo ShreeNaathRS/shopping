@@ -8,28 +8,34 @@ import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps'
 
 const Orders = ({ userId }) => {
 
-    const [sortString, setSortString] = useState('createdAt,desc')
     const [orderResponse, setOrderResponse] = useState(null)
-    const [itemsPerPage, setItemsPerPage] = useState(3)
-    const [currentPage, setCurrentPage] = useState(1);
+    const [paginationParams, setPaginationParams] = useState({
+        sortString: 'createdAt,desc',
+        itemsPerPage: 3,
+        currentPage: 1
+    })
     const [loading, setLoading] = useState(false)
-    const { doAPICall: getOrders } = useAuthAxiosWithProps({ setLoader: setLoading, setResponse: setOrderResponse })
+    const { doAPICall: getOrders } = useAuthAxiosWithProps({
+        setLoader: setLoading,
+        setResponse: setOrderResponse,
+    })
 
     useEffect(()=>{
-        getOrders('GET',`/orders/byUser/${userId}?page=${currentPage-1}&size=${itemsPerPage}&sort=${sortString}`)
-    }, [currentPage, userId, itemsPerPage, sortString, getOrders])
+        if(userId){
+            getOrders('GET',`/orders/byUser/${userId}?page=${paginationParams.currentPage-1}&size=${paginationParams.itemsPerPage}&sort=${paginationParams.sortString}`)
+        }
+    }, [paginationParams.currentPage, paginationParams.itemsPerPage, paginationParams.sortString, userId, getOrders])
 
     return (
         <div className='order-container'>
             <div className='order-table-container'>
                 <div className='order-table-wrapper'>
-                    <OrderTable mainHeader={ORDER_TABLE_HEADER} subHeader={ORDER_ROW_TABLE_HEADER} responseData={orderResponse?.data}
-                        itemsPerPage={itemsPerPage} currentPage={currentPage} loading={loading} setSortString={setSortString}
+                    <OrderTable mainHeader={ORDER_TABLE_HEADER} subHeader={ORDER_ROW_TABLE_HEADER}
+                        responseData={orderResponse?.data} loading={loading}
+                        paginationParams={paginationParams} setPaginationParams={setPaginationParams}
                     />
                 </div>
-                <OrderTablePagination currentPage={currentPage} itemsPerPage={itemsPerPage} response={orderResponse}
-                    setCurrentPage={setCurrentPage} setItemsPerPage={setItemsPerPage} 
-                />
+                <OrderTablePagination response={orderResponse} paginationParams={paginationParams} setPaginationParams={setPaginationParams}/>
             </div>
             
         </div>
