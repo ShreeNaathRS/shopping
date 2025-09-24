@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { login } from '../../store/slices/loggedInUserSlice';
 import { useDispatch } from 'react-redux';
 import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps';
@@ -9,15 +9,9 @@ const Login = ({ closeDialog }) => {
     const dispatch = useDispatch();
     const loginNameRef = useRef()
     const loginPwdRef = useRef()
-    const [ loginResponse, setLoginResponse] = useState(null)
-    const [ loginErrorMessage, setLoginErrorMessage ] = useState('')
-    const { doAPICall: doLoginAPICall } = useAuthAxiosWithProps( { setResponse: setLoginResponse, setErrorMessage: setLoginErrorMessage } );
-    const [ loginInfo ] = useState(()=>{
-        const localStorageLoginInfo = localStorage.getItem('loginInfo')
-        return localStorageLoginInfo ? JSON.parse(localStorageLoginInfo): null
-    })
-
-    useEffect(()=>{
+    const [loginErrorMessage, setLoginErrorMessage] = useState('')
+    
+    const onLoginSuccess = loginResponse =>{
         if(loginResponse){
             const { token, ...otherLoginInfo } = loginResponse;
             const exp = jwtDecode(token).exp * 1000
@@ -27,8 +21,12 @@ const Login = ({ closeDialog }) => {
             loginPwdRef.current.value = ''
             closeDialog(loginResponse)
         }
-    }, [loginResponse, dispatch, closeDialog])
-
+    }
+    const { doAPICall: doLoginAPICall } = useAuthAxiosWithProps( { onSuccess: onLoginSuccess, setErrorMessage: setLoginErrorMessage } );
+    const [ loginInfo ] = useState(()=>{
+        const localStorageLoginInfo = localStorage.getItem('loginInfo')
+        return localStorageLoginInfo ? JSON.parse(localStorageLoginInfo): null
+    })
 
     useLayoutEffect(()=>{
         if(loginInfo?.exp && moment(loginInfo.exp).isAfter(moment())){

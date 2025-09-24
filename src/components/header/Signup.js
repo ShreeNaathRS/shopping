@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ERROR_SERVER } from '../../constants';
-import { useAuthorizedAxios } from '../../hooks/useAuthorizedAxios';
+import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps';
 
 const Signup = ({ closeDialog }) => {
     const signUpNameRef = useRef()
@@ -8,7 +8,23 @@ const Signup = ({ closeDialog }) => {
     const signUpPwdRef = useRef()
     const signUpConfirmPwdRef = useRef()
     const [signupErrorMessage, setSignupErrorMessage] = useState('')
-    const { authorizedAxios } = useAuthorizedAxios()
+    const onSignupError = err => {
+        if(err.error.status===0){
+            setSignupErrorMessage('')
+            signUpNameRef.current.value = ''
+            signUpEmailRef.current.value = ''
+            signUpPwdRef.current.value = ''
+            signUpConfirmPwdRef.current.value = ''
+            closeDialog()
+        }
+        else if(err.error.status===409){
+            setSignupErrorMessage("User already exists!");
+        }
+        else{
+            setSignupErrorMessage(ERROR_SERVER);
+        }
+    }
+    const { doAPICall: doSignupAPICall } = useAuthAxiosWithProps({ setErrorMessage: setSignupErrorMessage, onError: onSignupError })
 
     useEffect(()=>{
         const modalElement = document.getElementById('loginModal');
@@ -31,38 +47,12 @@ const Signup = ({ closeDialog }) => {
         } else{
             setSignupErrorMessage(null)
         }
-        let errorStatus = 0
         const signupForm = document.getElementById('signupForm');
         if (!signupForm.checkValidity()) {
             signupForm.reportValidity();
             return;
         }
-        try{
-            await doSignup()
-            errorStatus = 0
-        } catch(err){
-            errorStatus=err.status;
-            console.error(err)
-        } finally{
-            if(errorStatus===0){
-                setSignupErrorMessage('')
-                signUpNameRef.current.value = ''
-                signUpEmailRef.current.value = ''
-                signUpPwdRef.current.value = ''
-                signUpConfirmPwdRef.current.value = ''
-                closeDialog()
-            }
-            else if(errorStatus===409){
-                setSignupErrorMessage("You are already signed up!");
-            }
-            else{
-                setSignupErrorMessage(ERROR_SERVER);
-            }
-        }
-    }
-
-    const doSignup = () => {
-        return authorizedAxios.post('/login',
+        await doSignupAPICall('POST','/login',
             {
                 name: signUpNameRef.current.value,
                 password: signUpPwdRef.current.value,

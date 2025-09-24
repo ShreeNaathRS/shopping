@@ -2,11 +2,13 @@ import { useCallback } from 'react';
 import { useAuthorizedAxios } from './useAuthorizedAxios';
 import { ERROR_SERVER, UNAUTHORIZED, UNSUCCESSFUL_AUTHENTICATION } from '../constants';
 
-export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, setErrorMessage }) => {
+export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, setErrorMessage, onSuccess, onError }) => {
     const { authorizedAxios } = useAuthorizedAxios();
 
     const doAPICall = useCallback(async (method, url, params) => {
         let errorStatus = 0;
+        let errorMessage = '';
+        let error;
         setLoader?.(true);
         try {
             let resp;
@@ -28,25 +30,33 @@ export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, 
             }
 
             setResponse?.(resp.data);
+            onSuccess?.(resp.data)
         } catch (err) {
             errorStatus = err?.response?.status || 500;
+            error=err
             setErrorStatus?.(errorStatus);
             console.error(err);
         } finally {
             setLoader?.(false);
-
             if (errorStatus === 0) {
                 setErrorStatus?.(0);
-                setErrorMessage?.('');
+                errorMessage='';
             } else if (errorStatus === 401) {
-                setErrorMessage?.(UNAUTHORIZED);
+                errorMessage=UNAUTHORIZED;
             } else if (errorStatus === 403) {
-                setErrorMessage?.(UNSUCCESSFUL_AUTHENTICATION);
+                errorMessage=UNSUCCESSFUL_AUTHENTICATION;
             } else {
-                setErrorMessage?.(ERROR_SERVER);
+                errorMessage=ERROR_SERVER;
+            }
+            if(errorStatus!==0){
+                setErrorMessage?.(errorMessage)
+                onError?.({
+                    error,
+                    errorMessage
+                })
             }
         }
-    }, [authorizedAxios, setLoader, setResponse, setErrorStatus, setErrorMessage]);
+    }, [authorizedAxios, setLoader, setResponse, setErrorStatus, setErrorMessage, onError, onSuccess]);
 
     return { doAPICall };
 };
