@@ -61,7 +61,7 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
         <div ref={popoverRef} className="login-container" id="profilePopoverContent" style={{display: `${profileExpanded?'flex':'none'}`}}>
             <div className="text-center login" >
                 <p style={{fontWeight: 'bold'}}>Welcome, {name}</p>
-                <p style={{fontWeight: 'bold'}}>{email}</p>
+                <p style={{fontWeight: 'bold', overflowWrap: 'break-word'}}>{email}</p>
                 <span><NavLink to='/orders' key={'Orders'}>Orders</NavLink></span>
                 <button style={{width: '70px', alignSelf: 'center', height: '25px', marginBottom: '5px', padding: '0'}} className="btn btn-sm btn-danger mt-2" 
                     onClick={()=>{

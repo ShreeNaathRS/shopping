@@ -1,6 +1,6 @@
+import './cart.css'
 import { EMPTY_CART } from '../../../constants'
 import CenteredIndicator from '../../common/CenteredIndicator'
-import './cart.css'
 import CartItems from './Cartitems'
 import CartPayment from './CartPayment'
 

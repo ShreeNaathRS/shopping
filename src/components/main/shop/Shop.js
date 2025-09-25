@@ -8,11 +8,11 @@ import { EMPTY_PRODUCTS } from '../../../constants'
 import { useAuthorizedAxios } from '../../../hooks/useAuthorizedAxios'
 
 const Shop = ({products, productsLoading, searchText}) => {
+  const [categories, setCategories] = useState([])
   const {
     selectedCategory, setSelectedCategory,
     selectedSubCategory, setSelectedSubCategory
-  } = useCategoryFilter()
-  const [categories, setCategories] = useState([])
+  } = useCategoryFilter({categories})
   const hasFetched = useRef(false)
   const { authorizedAxios } = useAuthorizedAxios();
 

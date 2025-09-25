@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useCategoryFilter = () => {
+export const useCategoryFilter = ({ categories }) => {
   const [selectedCategory, setSelectedCategory] = useState(() => {
     const local = JSON.parse(localStorage.getItem("localCategoryFilter"));
     return local?.value || null;
@@ -10,6 +10,13 @@ export const useCategoryFilter = () => {
     const local = JSON.parse(localStorage.getItem("localSubCategoryFilter"));
     return local?.value || null;
   });
+
+  useEffect(()=>{
+    if(selectedCategory==null||selectedSubCategory==null){
+      setSelectedCategory(categories?.length?categories[0]:null);
+      setSelectedSubCategory(categories?.length && categories[0]? categories[0]?.subCategories[0]:null)
+    }
+  }, [categories, selectedCategory, selectedSubCategory])
 
   useEffect(() => {
     const isValid = selectedCategory && selectedSubCategory &&

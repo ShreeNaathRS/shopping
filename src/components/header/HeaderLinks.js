@@ -8,7 +8,7 @@ import HeaderLoginSignupModal from './HeaderLoginSignupModal';
 
 const HeaderLinks = () => {
     const tabs = useMemo(() => [
-        { name: 'Home', route: '/home', isActive: false },
+        // { name: 'Home', route: '/home', isActive: false },
         { name: 'Shop', route: '/shop', isActive: false },
         { name: 'Cart', route: '/cart', isActive: false }
     ], []);

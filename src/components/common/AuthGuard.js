@@ -8,7 +8,7 @@ const AuthGuard = ({ children }) => {
         return localStorageLoginInfo? JSON.parse(localStorageLoginInfo): null
     })
 
-    return !loginInfo || moment(loginInfo.exp).isBefore(moment())? <Navigate to={'/home'} />: children
+    return !loginInfo || moment(loginInfo.exp).isBefore(moment())? <Navigate to={'/shop'} />: children
     
 }
 

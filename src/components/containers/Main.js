@@ -1,6 +1,5 @@
 import './main.css'
 
-import Home  from "../Home";
 import Cart from '../main/cart/Cart';
 import Shop from '../main/shop/Shop';
 
@@ -14,8 +13,8 @@ const Main = ({products, productsLoading, searchText, setSearchText}) => {
   return (
     <main className='main'>
       <Routes>
-        <Route path='/' element={<Navigate to='home' />} />
-        <Route path='/home' Component={Home} />
+        <Route path='/' element={<Navigate to='/shop' />} />
+        {/* <Route path='/home' element={<Navigate to='/shop' />} /> */}
         <Route path='/shop' element={<Shop products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>} />
         <Route path='/cart' Component={Cart} />
         <Route path='/orders' element={
@@ -24,6 +23,7 @@ const Main = ({products, productsLoading, searchText, setSearchText}) => {
           </AuthGuard>
           } 
         />
+        <Route path='/*' element={<Navigate to='/shop' />} />
       </Routes>
     </main>
   )
