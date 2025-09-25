@@ -1,5 +1,5 @@
 import './headerProfile.css'
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Popover } from 'bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/loggedInUserSlice";
@@ -14,8 +14,14 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
     const {name, email, token } = useSelector(state=>state.loggedInUser)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [ loginCartResponse, setLoginCartResponse] = useState(null)
-    const { doAPICall: getUserCart } = useAuthAxiosWithProps({ setResponse: setLoginCartResponse });
+    const onUserCartSuccess = useCallback(loginCartResponse => {
+        if(loginCartResponse){
+            dispatch(sync(loginCartResponse))
+        }
+    }, [dispatch])
+    const { doAPICall: getUserCart } = useAuthAxiosWithProps({
+            onSuccess: onUserCartSuccess 
+    });
 
     useEffect(() => {
         if(token){
@@ -25,12 +31,6 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
             }
         }
     }, [token, getUserCart]);
-
-    useEffect(()=>{
-        if(loginCartResponse){
-            dispatch(sync(loginCartResponse))
-        }
-    }, [loginCartResponse, dispatch])
 
     useEffect(() => {
         const handleClickOutside = (event) => {
