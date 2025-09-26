@@ -40,6 +40,7 @@ export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, 
             setLoader?.(false);
             if (errorStatus === 0) {
                 setErrorStatus?.(0);
+                setErrorMessage?.('')
                 errorMessage='';
             } else if (errorStatus === 401) {
                 errorMessage=UNAUTHORIZED;

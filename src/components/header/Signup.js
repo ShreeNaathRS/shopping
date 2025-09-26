@@ -35,6 +35,9 @@ const Signup = ({ closeDialog }) => {
             signUpConfirmPwdRef.current.value = ''
             setSignupErrorMessage('')
         }
+        if(!modalElement){
+            return
+        }
         modalElement?.addEventListener('hidden.bs.modal', hiddenEvenHandler);
         return ()=>modalElement.removeEventListener('hidden.bs.modal', hiddenEvenHandler)
     })

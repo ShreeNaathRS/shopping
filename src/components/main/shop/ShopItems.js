@@ -11,6 +11,8 @@ const ShopItems = ({ products, selectedCategory, selectedSubCategory, searchText
       if(selectedCategory && selectedSubCategory){
         setFilteredProducts(products.filter(product=>searchText?product.company.toLowerCase().includes(searchText.toLowerCase()) || product.desc.toLowerCase().includes(searchText.toLowerCase()):true)
           .filter(product=>product.category === selectedCategory.id && product.subCategory === selectedSubCategory.id))
+      } else{
+        setFilteredProducts([])
       }
     },[selectedCategory, selectedSubCategory, searchText, products])
     return (
@@ -19,7 +21,7 @@ const ShopItems = ({ products, selectedCategory, selectedSubCategory, searchText
           filteredProducts.length?
           filteredProducts.map(product=>{
             return (
-              <Item product={product}/>
+              <Item key={product.id} product={product}/>
             )
           }):
           <CenteredIndicator message={searchText?EMPTY_FILTERED_PRODUCTS:EMPTY_PRODUCTS_IN_CATEGORY} />

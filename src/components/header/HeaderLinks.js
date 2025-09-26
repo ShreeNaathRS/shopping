@@ -7,29 +7,17 @@ import HeaderProfile from './HeaderProfile';
 import HeaderLoginSignupModal from './HeaderLoginSignupModal';
 
 const HeaderLinks = () => {
+    const location = useLocation()
     const tabs = useMemo(() => [
         // { name: 'Home', route: '/home', isActive: false },
-        { name: 'Shop', route: '/shop', isActive: false },
-        { name: 'Cart', route: '/cart', isActive: false }
-    ], []);
-    const location = useLocation()
+        { name: 'Shop', route: '/shop', isActive: location.pathname === '/shop' },
+        { name: 'Cart', route: '/cart', isActive: location.pathname === '/cart' }
+    ], [location.pathname]);
     
     const [cartCount, setCartCount] = useState(0)
     const productCartSlice = useSelector(state=>state.productCartCounter)
     const [profileExpanded, setProfileExpanded] = useState(false)
     const {name} = useSelector(state=>state.loggedInUser)
-    
-    useEffect(()=>{
-        if(location){
-            tabs.forEach(tab=>{
-                if(tab.route===location.pathname){
-                    tab.isActive = true
-                } else{
-                    tab.isActive = false
-                }
-            })
-        }
-    }, [location, tabs])
 
     useEffect(()=>{
         if(productCartSlice.products){

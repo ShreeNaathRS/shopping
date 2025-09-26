@@ -8,6 +8,9 @@ import { NO_ORDERS } from "../../constants";
 export const OrderTable = ( { mainHeader, subHeader, responseData, loading, paginationParams, setPaginationParams } ) => {
     const [header, setHeader] = useState(null)
     const [expandedRow, setExpandedRow] = useState(null);
+    useEffect(()=>{
+        setExpandedRow(null)
+    },[responseData])
     const toggleRow = index => {
         setExpandedRow(prev => (prev === index ? null : index));
     };
@@ -47,9 +50,10 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, loading, pagi
                     <tr>
                         {
                             header?.map((header, index)=>
-                                <th style={{position:'sticky', top: '0', minWidth: header.minWidth}} scope="col">
+                                <th key={header.sortingName ?? index}
+                                    style={{position:'sticky', top: '0', minWidth: header.minWidth}} scope="col">
                                     {header.title}
-                                    {header.sortable && <span onClick={()=>toggleSort(index)}>{header.sortOrder==='desc'?<i class="bi bi-caret-down-fill"></i>:<i class="bi bi-caret-up-fill"></i>}</span>}
+                                    {header.sortable && <span onClick={()=>toggleSort(index)}>{header.sortOrder==='desc'?<i className="bi bi-caret-down-fill"></i>:<i className="bi bi-caret-up-fill"></i>}</span>}
                                 </th>
                             )
                         }
@@ -71,13 +75,12 @@ export const OrderTable = ( { mainHeader, subHeader, responseData, loading, pagi
                                     <table className="table table-sm mb-0 order-product-table">
                                         <thead>
                                             <tr>
-                                                {subHeader.map(rowHeader=><th>{rowHeader}</th>)}
-                                            </tr>
-                                        </thead>
+                                                {subHeader.map((rowHeader, idx) => <th key={rowHeader ?? idx}>{rowHeader}</th>)}
+                                            </tr>                                        </thead>
                                         <tbody>
                                             {
                                                 order.products.map((orderProduct,index)=>
-                                                    <tr>
+                                                    <tr key={orderProduct.receiptId ?? index}>
                                                         <td>{index+1}</td>
                                                         <td>
                                                             <OrderProduct product={orderProduct.product} />

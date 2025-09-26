@@ -7,10 +7,10 @@
     @media only screen and (max-height: 400px) and (orientation: landscape){
         max-height: 80dvh;
     }
-    @media only screen and (max-height: 300px) and (orientation: landscape){
-        max-height: 78dvh;
-    }
     @media only screen and (max-width: 896px) and (orientation: landscape){
         max-height: 80dvh;
+    }
+    @media only screen and (max-height: 300px) and (orientation: landscape){
+        max-height: 78dvh;
     }
 }

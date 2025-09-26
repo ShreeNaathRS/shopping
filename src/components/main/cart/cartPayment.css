@@ -59,13 +59,13 @@
     }
 }
 
-@media only screen and (max-width: 950) and (orientation: landscape) {
+@media only screen and (max-width: 950px) and (orientation: landscape) {
     .cart-total,.cart-sub-total{
         flex-direction: column;
     }
 }
 
-@media only screen  and (max-width: 1500) and (orientation: landscape) {
+@media only screen  and (max-width: 1500px) and (orientation: landscape) {
     .cart-payment{
         width: 45dvw;
     }

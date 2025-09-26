@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { PAGINATION_OPTIONS } from "../../constants"
 
 const OrderTablePagination = ({ response, paginationParams, setPaginationParams }) => {
 
@@ -47,7 +48,7 @@ const OrderTablePagination = ({ response, paginationParams, setPaginationParams 
                                 })
                             }}
                         >
-                            {[3, 5, 10, 25, 50].map(size => (
+                            {PAGINATION_OPTIONS.map(size => (
                             <option key={size} value={size}>{size}</option>
                             ))}
                         </select>

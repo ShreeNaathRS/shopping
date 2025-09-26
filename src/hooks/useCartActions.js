@@ -76,7 +76,7 @@ export const useCartActions = ({ setCartUpdateLoader, setCartUpdateErrorStatus, 
             updatedProducts=[...productCartSlice.products]
             updatedProducts.splice(cartProductIndex,1)
         }
-        updateCart(updatedProducts)
+        await updateCart(updatedProducts)
     }
 
     const updateCart = async updatedProducts =>{

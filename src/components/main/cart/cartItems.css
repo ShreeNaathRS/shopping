@@ -1,4 +1,4 @@
-.cart-items{
+.cart-items {
     overflow-y: auto;
     width: 70dvw;
     max-height: 100%;
@@ -8,19 +8,18 @@
     padding: 0px 0px 0px 10px;
     text-align: center;
     place-items: center;
-    .item{
+    & .item {
         display: flex;
         flex-direction: row;
         align-items: center;
         width: 400px;
         max-height: 250px;
     }
-    .item-img-container{
-        img{
+    & .item-img-container {
+        & img {
             width: 160px;
         }
     }
-    
 }
 
 @media only screen and (max-width: 950px) and (orientation: landscape) {
@@ -64,10 +63,10 @@
 
 @media only screen and (max-width: 480px) and (orientation: portrait) {
     .cart-products{
-        .card{
+        & .card{
             flex-direction: column;
         }
-        img{
+        & img{
             align-self: center;
         }
     }

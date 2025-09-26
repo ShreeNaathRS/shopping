@@ -14,7 +14,7 @@
 }
 
 .order-table-wrapper{
-    flex: 1 1;
+    flex: 1 1 auto;
     overflow-y: auto;
 }
 

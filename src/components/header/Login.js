@@ -15,7 +15,9 @@ const Login = ({ closeDialog }) => {
         if(loginResponse){
             const { token, ...otherLoginInfo } = loginResponse;
             const exp = jwtDecode(token).exp * 1000
-            dispatch(login({ token, exp, ...otherLoginInfo }))
+            const payload = { ...otherLoginInfo, token, exp } 
+            localStorage.setItem('loginInfo', JSON.stringify(payload))
+            dispatch(login(payload))
             setLoginErrorMessage('')
             loginNameRef.current.value = ''
             loginPwdRef.current.value = ''
@@ -30,6 +32,7 @@ const Login = ({ closeDialog }) => {
 
     useLayoutEffect(()=>{
         if(loginInfo?.exp && moment(loginInfo.exp).isAfter(moment())){
+            localStorage.setItem('loginInfo', JSON.stringify(loginInfo))
             dispatch(login(loginInfo))
         } else{
             localStorage.removeItem('loginInfo')

@@ -25,9 +25,13 @@ const HeaderProfile = ({profileExpanded, setProfileExpanded}) => {
 
     useEffect(() => {
         if(token){
-            const isTokenValid = moment(jwtDecode(token).exp * 1000).isAfter(moment());
-            if (isTokenValid) {
-                getUserCart('GET', '/cart');
+            try{
+                const isTokenValid = moment(jwtDecode(token).exp * 1000).isAfter(moment());
+                if (isTokenValid) {
+                    getUserCart('GET', '/cart');
+                }
+            } catch(err){
+                console.error('Malformed Token')
             }
         }
     }, [token, getUserCart]);

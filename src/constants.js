@@ -1,6 +1,6 @@
 export const EMPTY_PRODUCTS = 'No items to display'
 
-export const EMPTY_PRODUCTS_IN_CATEGORY = 'No items in the given catg and sub catg'
+export const EMPTY_PRODUCTS_IN_CATEGORY = 'No items in the selected category or subcategory'
 
 export const EMPTY_FILTERED_PRODUCTS = 'No items based on filters'
 
@@ -27,3 +27,5 @@ export const UNAUTHORIZED = 'Unauthorized'
 export const UNSUCCESSFUL_AUTHENTICATION = 'Unsuccessful Authentication'
 
 export const SESSION_EXPIRED = 'Session Expired!'
+
+export const PAGINATION_OPTIONS = [1, 3, 5, 10, 25, 50]

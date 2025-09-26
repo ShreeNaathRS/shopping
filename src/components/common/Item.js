@@ -5,7 +5,7 @@ const Item = ({product}) => {
   return (
     <div key={product.id} className="item">
         <div className='item-img-container'>
-            <img src={`https://swift-shopping-images.s3.ap-south-1.amazonaws.com${product.imageUrl}`} className="item-img-top" alt="..."/>
+            <img src={`https://swift-shopping-images.s3.ap-south-1.amazonaws.com${product.imageUrl}`} className="item-img-top" alt={product?.desc}/>
         </div>
         <div className='item-body-container'>
             <div className="item-body">
