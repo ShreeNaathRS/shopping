@@ -1,29 +1,55 @@
-import { useEffect } from "react"
-import { PAGINATION_OPTIONS } from "../../constants"
+import { useEffect, useState } from "react";
+import { PAGINATION_OPTIONS } from "../../constants";
 
 const OrderTablePagination = ({ response, paginationParams, setPaginationParams }) => {
+    const [visibleCount, setVisibleCount] = useState(2);
 
-    useEffect(()=>{
-        if(response){
-            setPaginationParams(prev=>{
-                return {
-                    ...prev,
-                    totalItems: response.totalItems,
-                    totalPages: response.totalPages
-                }
-            })
+    useEffect(() => {
+        if (response) {
+            setPaginationParams(prev => ({
+                ...prev,
+                totalItems: response.totalItems,
+                totalPages: response.totalPages
+            }));
         }
-    }, [response, setPaginationParams])
+    }, [response, setPaginationParams]);
+
+    useEffect(() => {
+        const updateVisibleCount = () => {
+            if (window.matchMedia("(max-width: 480px) and (orientation: portrait)").matches) {
+            setVisibleCount(2);
+            } else if (window.matchMedia("(max-width: 768px) and (orientation: landscape)").matches) {
+            setVisibleCount(4);
+            } else {
+            setVisibleCount(6);
+            }
+        };
+
+        updateVisibleCount();
+        window.addEventListener("resize", updateVisibleCount);
+        return () => window.removeEventListener("resize", updateVisibleCount);
+    }, []);
 
     const handlePageChange = (page) => {
         if (page >= 1 && page <= paginationParams.totalPages) {
-            setPaginationParams(prev=>{
-                return {
-                    ...prev,
-                    currentPage: page
-                }
-            })
+            setPaginationParams(prev => ({
+                ...prev,
+                currentPage: page
+            }));
         }
+    };
+
+    const getVisiblePages = () => {
+        const { currentPage, totalPages } = paginationParams;
+        let start = Math.max(1, currentPage - Math.floor(visibleCount / 2));
+        let end = start + visibleCount - 1;
+
+        if (end > totalPages) {
+            end = totalPages;
+            start = Math.max(1, end - visibleCount + 1);
+        }
+
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
 
     return (
@@ -39,50 +65,65 @@ const OrderTablePagination = ({ response, paginationParams, setPaginationParams 
                             className="form-select w-auto"
                             value={paginationParams.itemsPerPage}
                             onChange={(e) => {
-                                setPaginationParams(prev=>{
-                                    return {
-                                        ...prev,
-                                        itemsPerPage: Number(e.target.value),
-                                        currentPage: 1
-                                    }
-                                })
+                                setPaginationParams(prev => ({
+                                    ...prev,
+                                    itemsPerPage: Number(e.target.value),
+                                    currentPage: 1
+                                }));
                             }}
                         >
                             {PAGINATION_OPTIONS.map(size => (
-                            <option key={size} value={size}>{size}</option>
+                                <option key={size} value={size}>{size}</option>
                             ))}
                         </select>
                     </div>
                     <div className='items-on-page fw-bold'>
-                        {response?.data?.length===1?<span>{(paginationParams.itemsPerPage*(paginationParams.currentPage-1))+1}({paginationParams.totalItems})</span>:''}
-                        {response?.data?.length>1&&response?.data?.length<paginationParams.itemsPerPage?<span>{(paginationParams.itemsPerPage*(paginationParams.currentPage-1))+1}-{paginationParams.totalItems}({paginationParams.totalItems})</span>:''}
-                        {response?.data?.length===paginationParams.itemsPerPage?<span>{(paginationParams.itemsPerPage*(paginationParams.currentPage-1))+1}-{(paginationParams.itemsPerPage*(paginationParams.currentPage-1))+paginationParams.itemsPerPage}({paginationParams.totalItems})</span>:''}
+                        {response?.data?.length === 1 &&
+                            <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1} ({paginationParams.totalItems})</span>}
+                        {response?.data?.length > 1 && response?.data?.length < paginationParams.itemsPerPage &&
+                            <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1}-{paginationParams.totalItems} ({paginationParams.totalItems})</span>}
+                        {response?.data?.length === paginationParams.itemsPerPage &&
+                            <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1}-{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + paginationParams.itemsPerPage} ({paginationParams.totalItems})</span>}
                     </div>
                     <nav>
                         <ul className="pagination justify-content-center">
                             <li className={`page-item ${paginationParams.currentPage === 1 ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(paginationParams.currentPage - 1)}>
-                                {'<<'}
-                            </button>
-                            </li>
-                            { paginationParams.totalPages && [...Array(paginationParams.totalPages)].map((_, i) => (
-                            <li key={i} className={`page-item ${paginationParams.currentPage === i + 1 ? 'active' : ''}`}>
-                                <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                                {i + 1}
+                                <button className="page-link" onClick={() => handlePageChange(1)}>
+                                    {'<<'}
                                 </button>
                             </li>
+
+                            <li className={`page-item ${paginationParams.currentPage === 1 ? 'disabled' : ''}`}>
+                                <button className="page-link" onClick={() => handlePageChange(paginationParams.currentPage - 1)}>
+                                    {'<'}
+                                </button>
+                            </li>
+
+                            {getVisiblePages().map(page => (
+                                <li key={page} className={`page-item ${paginationParams.currentPage === page ? 'active' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                        {page}
+                                    </button>
+                                </li>
                             ))}
+
                             <li className={`page-item ${paginationParams.currentPage === paginationParams.totalPages ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(paginationParams.currentPage + 1)}>
-                                {'>>'}
-                            </button>
+                                <button className="page-link" onClick={() => handlePageChange(paginationParams.currentPage + 1)}>
+                                    {'>'}
+                                </button>
+                            </li>
+
+                            <li className={`page-item ${paginationParams.currentPage === paginationParams.totalPages ? 'disabled' : ''}`}>
+                                <button className="page-link" onClick={() => handlePageChange(paginationParams.totalPages)}>
+                                    {'>>'}
+                                </button>
                             </li>
                         </ul>
                     </nav>
                 </div>
             }
         </>
-    )
-}
+    );
+};
 
-export default OrderTablePagination
+export default OrderTablePagination;
