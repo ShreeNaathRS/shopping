@@ -14,15 +14,19 @@ const CartPayment = ({ productCartSlice }) => {
     const dispatch = useDispatch()
     const { doPayment } = usePayment()
     const { userId } = useSelector(state=>state.loggedInUser)
-    const [orderResponse, setOrderResponse] = useState(null)
-    const { doAPICall: placeOrder } = useAuthAxiosWithProps({
-        setResponse: setOrderResponse
-    });
-    const [deleteCartId, setDeleteCartId] = useState(null)
-    const { doAPICall: deleteCart } = useAuthAxiosWithProps({
-        setResponse: setDeleteCartId
-    });
-    const {authorizedAxios} = useAuthorizedAxios()
+    const onOrderSuccess = orderResponse => {
+        if(orderResponse){
+            deleteCart('DELETE', '/cart')
+        }
+    }
+    const onDeleteCartSuccess = deleteCartId => {
+        if(deleteCartId > 0){
+            dispatch(clearCart())
+        }
+    }
+    const { doAPICall: placeOrder } = useAuthAxiosWithProps({ onSuccess: onOrderSuccess });
+    const { doAPICall: deleteCart } = useAuthAxiosWithProps({ onSuccess: onDeleteCartSuccess });
+    const { authorizedAxios } = useAuthorizedAxios()
 
     useEffect(()=>{
         if(productCartSlice?.products){
@@ -32,18 +36,6 @@ const CartPayment = ({ productCartSlice }) => {
             setSum(sum)
         }
     }, [productCartSlice.products])
-
-    useEffect(()=>{
-        if(orderResponse){
-            deleteCart('DELETE', '/cart')
-        }
-    }, [orderResponse, deleteCart])
-
-    useEffect(()=>{
-        if(deleteCartId > 0){
-            dispatch(clearCart())
-        }
-    },[deleteCartId, dispatch])
 
     const createOrder = async () => {
         const response = await authorizedAxios.post('payment/create-order',{

@@ -5,43 +5,21 @@ import './App.css';
 import Footer from './components/containers/Footer';
 import Header from './components/containers/Header';
 import Main from './components/containers/Main';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useAuthorizedAxios } from './hooks/useAuthorizedAxios';
+import { useAuthAxiosWithProps } from './hooks/useAuthAxiosWithProps';
 
 function App() {
 
-  const [products, setProducts] = useState([])
   const [searchText, setSearchText] = useState('')
   const [productsLoading, setProductsLoading] = useState(true)
-  const hasFetched = useRef(false)
-  const { authorizedAxios } = useAuthorizedAxios()
+  const [products, setProducts] = useState([])
+  const onGetProdcutsSuccess = useCallback(response => setProducts(response), [setProducts])
+  const { doAPICall: getProducts } = useAuthAxiosWithProps({ onSuccess: onGetProdcutsSuccess, setLoader: setProductsLoading })
 
-  const setViewportHeight = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
-  window.addEventListener('resize', setViewportHeight);
-
-  useEffect(()=>{
-    if(hasFetched.current){
-      return
-    }
-    setViewportHeight();
-    hasFetched.current = true
-    const fetchProducts = async () => {
-      setProductsLoading(true)
-      try{
-        const response = (await authorizedAxios.get("/products"));
-        setProducts(response.data)
-        setProductsLoading(false)
-      }catch(err){
-        console.log(err)
-        setProductsLoading(false)
-      }
-    }
-    fetchProducts()
-  })
+  useEffect(() => {
+    getProducts('GET', '/products');
+  }, [getProducts]);
 
   const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (

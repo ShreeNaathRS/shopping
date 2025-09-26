@@ -28,7 +28,7 @@ const OrderTablePagination = ({ response, paginationParams, setPaginationParams 
         updateVisibleCount();
         window.addEventListener("resize", updateVisibleCount);
         return () => window.removeEventListener("resize", updateVisibleCount);
-    }, []);
+    });
 
     const handlePageChange = (page) => {
         if (page >= 1 && page <= paginationParams.totalPages) {

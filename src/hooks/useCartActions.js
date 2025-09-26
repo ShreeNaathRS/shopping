@@ -1,21 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { sync } from '../store/slices/productCartSlice'
 import { useAuthAxiosWithProps } from './useAuthAxiosWithProps';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
 export const useCartActions = ({ setCartUpdateLoader, setCartUpdateErrorStatus, setCartUpdateErrorMessage }) => {
 
     const productCartSlice = useSelector(state=>state.productCartCounter)
     const { userId } = useSelector(state=>state.loggedInUser)
-    const [cartUpdateResponse, setCartUpdateResponse] = useState(null)
-    const { doAPICall: postUpdateCart } = useAuthAxiosWithProps( { setLoader: setCartUpdateLoader, setResponse: setCartUpdateResponse, setErrorStatus: setCartUpdateErrorStatus, setErrorMessage: setCartUpdateErrorMessage } );
     const dispatch = useDispatch()
-
-    useEffect(()=>{
-        if(cartUpdateResponse){
-            dispatch(sync(cartUpdateResponse))
-        }
-    }, [cartUpdateResponse, dispatch])
+    const onCartUpdateSucess = useCallback(cartUpdateResponse => dispatch(sync(cartUpdateResponse)), [dispatch])
+    const { doAPICall: postUpdateCart } = useAuthAxiosWithProps( { setLoader: setCartUpdateLoader, onSuccess: onCartUpdateSucess, setErrorStatus: setCartUpdateErrorStatus, setErrorMessage: setCartUpdateErrorMessage } );
 
     const handleSaveCart = product => {
         if(productCartSlice.id){

@@ -1,36 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './shop.css'
 import ShopFilter from './ShopFilter'
 import ShopItems from './ShopItems'
 import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_PRODUCTS } from '../../../constants'
-import { useAuthorizedAxios } from '../../../hooks/useAuthorizedAxios'
+import { useAuthAxiosWithProps } from '../../../hooks/useAuthAxiosWithProps'
 
 const Shop = ({products, productsLoading, searchText}) => {
   const [categories, setCategories] = useState([])
-  const {
-    selectedCategory, setSelectedCategory,
-    selectedSubCategory, setSelectedSubCategory
-  } = useCategoryFilter({categories})
-  const hasFetched = useRef(false)
-  const { authorizedAxios } = useAuthorizedAxios();
+  const { selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory } = useCategoryFilter({categories})
+  const onFetchCategorySuccess = useCallback(response => setCategories(response), [setCategories])
+  const { doAPICall: fetchCategories } = useAuthAxiosWithProps({ onSuccess: onFetchCategorySuccess })
 
   useEffect(()=>{
-    if(hasFetched.current){
-      return
-    }
-    hasFetched.current = true
-    const fetchCategories = async () => {
-      try{
-        const response = await authorizedAxios.get("/category");
-        setCategories(response.data.filter(category=>category.name))
-      }catch(err){
-        console.error(err)
-      }
-    }
-    fetchCategories()
-  })
+    fetchCategories('GET', '/category')
+  }, [fetchCategories])
 
   return (
     <div className='shop'>
