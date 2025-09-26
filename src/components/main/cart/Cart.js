@@ -1,7 +1,7 @@
 import './cart.css'
 import { EMPTY_CART } from '../../../constants'
 import CenteredIndicator from '../../common/CenteredIndicator'
-import CartItems from './CartItems'
+import CartItems from './Cart-Items'
 import CartPayment from './CartPayment'
 
 import { useSelector } from 'react-redux'
