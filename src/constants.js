@@ -28,4 +28,4 @@ export const UNSUCCESSFUL_AUTHENTICATION = 'Unsuccessful Authentication'
 
 export const SESSION_EXPIRED = 'Session Expired!'
 
-export const PAGINATION_OPTIONS = [1, 3, 5, 10, 25, 50]
+export const PAGINATION_OPTIONS = [3, 5, 10, 25, 50]
