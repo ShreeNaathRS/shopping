@@ -2,7 +2,8 @@ import { useCallback } from 'react';
 import { useAuthorizedAxios } from './useAuthorizedAxios';
 import { ERROR_SERVER, UNAUTHORIZED, UNSUCCESSFUL_AUTHENTICATION } from '../constants';
 
-export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, setErrorMessage, onSuccess, onError }) => {
+export const useAuthAxiosWithProps = (props) => {
+    const { setLoader, setResponse, setErrorStatus, setErrorMessage, onSuccess, onError } = { ...props }?? null
     const { authorizedAxios } = useAuthorizedAxios();
 
     const doAPICall = useCallback(async (method, url, params) => {
@@ -31,11 +32,13 @@ export const useAuthAxiosWithProps = ({ setLoader, setResponse, setErrorStatus, 
 
             setResponse?.(resp.data);
             onSuccess?.(resp.data)
+            return resp.data
         } catch (err) {
             errorStatus = err?.response?.status || 500;
             error=err
             setErrorStatus?.(errorStatus);
             console.error(err);
+            throw err
         } finally {
             setLoader?.(false);
             if (errorStatus === 0) {

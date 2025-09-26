@@ -10,11 +10,10 @@ import { useAuthAxiosWithProps } from '../../../hooks/useAuthAxiosWithProps'
 const Shop = ({products, productsLoading, searchText}) => {
   const [categories, setCategories] = useState([])
   const { selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory } = useCategoryFilter({categories})
-  const onFetchCategorySuccess = useCallback(response => setCategories(response), [setCategories])
-  const { doAPICall: fetchCategories } = useAuthAxiosWithProps({ onSuccess: onFetchCategorySuccess })
+  const { doAPICall: fetchCategories } = useAuthAxiosWithProps()
 
   useEffect(()=>{
-    fetchCategories('GET', '/category')
+    fetchCategories('GET', '/category').then(response => setCategories(response))
   }, [fetchCategories])
 
   return (

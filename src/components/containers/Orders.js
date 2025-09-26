@@ -8,21 +8,19 @@ import { useAuthAxiosWithProps } from '../../hooks/useAuthAxiosWithProps'
 
 const Orders = ({ userId }) => {
 
-    const [orderResponse, setOrderResponse] = useState(null)
+    const [orderResponse, setOrderResponse] = useState([])
     const [paginationParams, setPaginationParams] = useState({
         sortString: 'createdAt,desc',
         itemsPerPage: 3,
         currentPage: 1
     })
     const [loading, setLoading] = useState(false)
-    const { doAPICall: getOrders } = useAuthAxiosWithProps({
-        setLoader: setLoading,
-        setResponse: setOrderResponse,
-    })
+    const { doAPICall: getOrders } = useAuthAxiosWithProps({ setLoader: setLoading })
 
     useEffect(()=>{
         if(userId){
             getOrders('GET',`/orders/byUser/${userId}?page=${paginationParams.currentPage-1}&size=${paginationParams.itemsPerPage}&sort=${paginationParams.sortString}`)
+            .then(response=>setOrderResponse(response))
         }
     }, [paginationParams.currentPage, paginationParams.itemsPerPage, paginationParams.sortString, userId, getOrders])
 
