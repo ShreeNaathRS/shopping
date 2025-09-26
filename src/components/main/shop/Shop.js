@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './shop.css'
 import ShopFilter from './ShopFilter'
 import ShopItems from './ShopItems'
