@@ -80,10 +80,6 @@ const OrderTablePagination = ({ response, paginationParams, setPaginationParams 
                     <div className='items-on-page fw-bold'>
                         {response?.data?.length === 1 &&
                             <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1} ({paginationParams.totalItems})</span>}
-                        {response?.data?.length > 1 && response?.data?.length < paginationParams.itemsPerPage &&
-                            <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1}-{paginationParams.totalItems} ({paginationParams.totalItems})</span>}
-                        {response?.data?.length === paginationParams.itemsPerPage &&
-                            <span>{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + 1}-{(paginationParams.itemsPerPage * (paginationParams.currentPage - 1)) + paginationParams.itemsPerPage} ({paginationParams.totalItems})</span>}
                     </div>
                     <nav>
                         <ul className="pagination justify-content-center">
