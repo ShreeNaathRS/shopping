@@ -8,6 +8,7 @@ import Main from './components/containers/Main';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAuthAxiosWithProps } from './hooks/useAuthAxiosWithProps';
+import Alert from './components/common/Alert';
 
 function App() {
 
@@ -22,11 +23,14 @@ function App() {
 
   const appDarkTheme = useSelector(state=>state.appDarkTheme)
   return (
-    <div className={`app apply-theme ${appDarkTheme? 'dark': 'light'}`}>
-      <Header setSearchText={setSearchText} />
-      <Main products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
-      <Footer/>
-    </div>
+    <>
+      <Alert />
+      <div className={`app apply-theme ${appDarkTheme? 'dark': 'light'}`}>
+        <Header setSearchText={setSearchText} />
+        <Main products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
+        <Footer/>
+      </div>
+    </>
   );
 }
 

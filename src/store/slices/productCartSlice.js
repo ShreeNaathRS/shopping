@@ -8,7 +8,7 @@ const initialState = {
 }
 
 const counterSlice = createSlice({
-    name: 'productCartCounter',
+    name: 'cart',
     initialState,
     reducers: {
         sync: (state, action)=>{

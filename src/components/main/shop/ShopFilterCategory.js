@@ -13,7 +13,7 @@ const ShopFilterCategory = ({ categories, selectedCategory, setSelectedCategory,
               }
             }}
         >
-          {categories.map((category,index)=><option selected={index===0} key={category.name}>{category.name}</option>)}
+          {categories?.map((category,index)=><option selected={index===0} key={category.name}>{category.name}</option>)}
         </select>
     </div>
   )

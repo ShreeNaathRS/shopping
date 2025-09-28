@@ -15,7 +15,7 @@ const HeaderLinks = () => {
     ], [location.pathname]);
     
     const [cartCount, setCartCount] = useState(0)
-    const productCartSlice = useSelector(state=>state.productCartCounter)
+    const productCartSlice = useSelector(state=>state.cart)
     const [profileExpanded, setProfileExpanded] = useState(false)
     const {name} = useSelector(state=>state.loggedInUser)
 

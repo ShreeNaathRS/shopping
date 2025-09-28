@@ -1,13 +1,15 @@
 import productCartReducer from "./slices/productCartSlice";
 import darkModeReducer from "./slices/appThemeSlice";
 import loggedInUserReducer from "./slices/loggedInUserSlice";
+import alertReducer from "./slices/alertSlice";
 
 const { configureStore } = require("@reduxjs/toolkit");
 
 export const store = configureStore({
     reducer: {
-        productCartCounter: productCartReducer,
+        cart: productCartReducer,
         appDarkTheme: darkModeReducer,
-        loggedInUser: loggedInUserReducer
+        loggedInUser: loggedInUserReducer,
+        alert: alertReducer
     }
 })

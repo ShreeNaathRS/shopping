@@ -1,10 +1,13 @@
 import { useCallback } from 'react';
 import { useAuthorizedAxios } from './useAuthorizedAxios';
 import { ERROR_SERVER, UNAUTHORIZED, UNSUCCESSFUL_AUTHENTICATION } from '../constants';
+import { useDispatch } from 'react-redux';
+import { alert, reset } from '../store/slices/alertSlice';
 
 export const useAuthAxiosWithProps = (props) => {
     const { setLoader, setResponse, setErrorStatus, setErrorMessage, onSuccess, onError } = { ...props }?? null
     const { authorizedAxios } = useAuthorizedAxios();
+    const dispatch = useDispatch()
 
     const doAPICall = useCallback(async (method, url, params) => {
         let errorStatus = 0;
@@ -38,7 +41,6 @@ export const useAuthAxiosWithProps = (props) => {
             error=err
             setErrorStatus?.(errorStatus);
             console.error(err);
-            throw err
         } finally {
             setLoader?.(false);
             if (errorStatus === 0) {
@@ -47,8 +49,10 @@ export const useAuthAxiosWithProps = (props) => {
                 errorMessage='';
             } else if (errorStatus === 401) {
                 errorMessage=UNAUTHORIZED;
+                dispatch(alert({ type: 'warning', message: 'Please login!' }))
             } else if (errorStatus === 403) {
                 errorMessage=UNSUCCESSFUL_AUTHENTICATION;
+                dispatch(alert({ type: 'warning', message: 'Please login!' }))
             } else {
                 errorMessage=ERROR_SERVER;
             }
@@ -58,9 +62,10 @@ export const useAuthAxiosWithProps = (props) => {
                     error,
                     errorMessage
                 })
+                setTimeout(()=>dispatch(reset()), 2500)
             }
         }
-    }, [authorizedAxios, setLoader, setResponse, setErrorStatus, setErrorMessage, onError, onSuccess]);
+    }, [authorizedAxios, setLoader, setResponse, setErrorStatus, setErrorMessage, onError, onSuccess, dispatch]);
 
     return { doAPICall };
 };

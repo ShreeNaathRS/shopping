@@ -7,7 +7,7 @@ import CartPayment from './CartPayment'
 import { useSelector } from 'react-redux'
 
 const Cart = () => {
-  const productCartSlice = useSelector(state=>state.productCartCounter)
+  const productCartSlice = useSelector(state=>state.cart)
   return (
     productCartSlice.products?.length?
     <div className='cart'>

@@ -3,13 +3,13 @@ import { sync } from '../store/slices/productCartSlice'
 import { useAuthAxiosWithProps } from './useAuthAxiosWithProps';
 import { useCallback } from 'react';
 
-export const useCartActions = ({ setCartUpdateLoader, setCartUpdateErrorStatus, setCartUpdateErrorMessage }) => {
+export const useCartActions = ({ setCartUpdateLoader }) => {
 
-    const productCartSlice = useSelector(state=>state.productCartCounter)
+    const productCartSlice = useSelector(state=>state.cart)
     const { userId } = useSelector(state=>state.loggedInUser)
     const dispatch = useDispatch()
     const onCartUpdateSucess = useCallback(cartUpdateResponse => dispatch(sync(cartUpdateResponse)), [dispatch])
-    const { doAPICall: postUpdateCart } = useAuthAxiosWithProps( { setLoader: setCartUpdateLoader, onSuccess: onCartUpdateSucess, setErrorStatus: setCartUpdateErrorStatus, setErrorMessage: setCartUpdateErrorMessage } );
+    const { doAPICall: postUpdateCart } = useAuthAxiosWithProps( { setLoader: setCartUpdateLoader, onSuccess: onCartUpdateSucess } );
 
     const handleSaveCart = product => {
         if(productCartSlice.id){
