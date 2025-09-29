@@ -4,14 +4,13 @@
     place-items: center;
     overflow-y: auto;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    .item{
+    & .item{
         align-items: center;
         width: min-content;
     }
-    .item-img-container{
-        width: 100%;
+    & .item-img-container{
         img{
-            height: 200px;
+            width: 160px;
         }
     }
     @media only screen and (max-width: 480px) and (orientation: portrait){
