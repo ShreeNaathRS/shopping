@@ -13,14 +13,30 @@
             width: 160px;
         }
     }
-    @media only screen and (max-width: 480px) and (orientation: portrait){
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    }
-    @media only screen and (max-width: 768px) and (orientation: landscape){
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    }
 }
 
 .shop-items *{
     border-radius: 5px;
+}
+
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    .shop-items{
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        & .item{
+            & .item-img-container{
+                & img{
+                    width: 200px;
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 768px) and (orientation: landscape){
+    .shop-items{
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    img{
+        width: 160px;
+    }
 }
