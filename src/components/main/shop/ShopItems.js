@@ -16,7 +16,7 @@ const ShopItems = ({ products, selectedCategory, selectedSubCategory, searchText
       }
     },[selectedCategory, selectedSubCategory, searchText, products])
     return (
-    <div className='shop-items'>
+    <div className='shop-items' style={{display: `${filteredProducts?.length?'grid':'flex'}`}}>
         {
           filteredProducts.length?
           filteredProducts.map(product=>{

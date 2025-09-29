@@ -9,9 +9,11 @@
     flex-direction: row;
     justify-content: space-evenly;
     .form-control{
+        max-height: 30px;
         min-width: 40px;
         width: 17%;
         text-align: center;
+        align-self: center;
     }
 }
 

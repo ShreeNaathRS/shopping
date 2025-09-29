@@ -27,12 +27,11 @@
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         .item{
             width: 300px;
-            max-height: 180px;
+            max-height: 130px;
         }
         .item-img-container{
-            width: 60%;
             img{
-                width: 100%;
+                width: 120px;
             }
         }
     }
