@@ -9,7 +9,10 @@
         width: min-content;
     }
     & .item-img-container{
-        img{
+        & .img-loading{
+            width: 160px;
+        }
+        & img{
             width: 160px;
         }
     }
