@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_FILTERED_PRODUCTS, EMPTY_PRODUCTS_IN_CATEGORY } from '../../../constants'
 import Item from '../../common/Item'
+import ListComponent from '../../common/ListComponent'
 
 const ShopItems = ({ products, selectedCategory, selectedSubCategory, searchText }) => {
     const [filteredProducts, setFilteredProducts] = useState([])
@@ -19,11 +20,7 @@ const ShopItems = ({ products, selectedCategory, selectedSubCategory, searchText
     <div className='shop-items' style={{display: `${filteredProducts?.length?'grid':'flex'}`}}>
         {
           filteredProducts.length?
-          filteredProducts.map(product=>{
-            return (
-              <Item key={product.id} product={product}/>
-            )
-          }):
+          <ListComponent data={filteredProducts} renderItem={product=><Item key={product.id} product={product}/>}/>:
           <CenteredIndicator message={searchText?EMPTY_FILTERED_PRODUCTS:EMPTY_PRODUCTS_IN_CATEGORY} />
         }
     </div>

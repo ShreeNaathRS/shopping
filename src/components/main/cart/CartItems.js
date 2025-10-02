@@ -1,13 +1,12 @@
 import './cartItems.css'
 
 import Item from "../../common/Item";
+import ListComponent from '../../common/ListComponent';
 
 const CartItems = ({ productCartSlice }) => {
     return (
         <div className='cart-items'>
-        {
-            productCartSlice.products?.map(cartProduct=><Item product={cartProduct.product}/>)
-        }
+            <ListComponent data={productCartSlice.products} renderItem={cartProduct=><Item product={cartProduct.product}/>}/>
         </div>
       )
 }
