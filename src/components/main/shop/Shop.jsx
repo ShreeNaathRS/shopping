@@ -6,6 +6,7 @@ import { useCategoryFilter } from '../../../hooks/useCategoryFilter'
 import CenteredIndicator from '../../common/CenteredIndicator'
 import { EMPTY_PRODUCTS } from '../../../constants'
 import { useAuthAxiosWithProps } from '../../../hooks/useAuthAxiosWithProps'
+import { SafeRender } from '../../common/SafeRender'
 
 const Shop = ({products, productsLoading, searchText}) => {
   const [categories, setCategories] = useState([])
@@ -18,7 +19,9 @@ const Shop = ({products, productsLoading, searchText}) => {
 
   return (
     <div className='shop'>
-      <ShopFilter categories={categories} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} setSelectedCategory={setSelectedCategory} setSelectedSubCategory={setSelectedSubCategory}/>
+      <SafeRender>
+        <ShopFilter categories={categories} selectedCategory={selectedCategory} selectedSubCategory={selectedSubCategory} setSelectedCategory={setSelectedCategory} setSelectedSubCategory={setSelectedSubCategory}/>
+      </SafeRender>
       { productsLoading? 
           <CenteredIndicator loader={true}/>:
           products?
