@@ -18,9 +18,6 @@ const Item = ({product}) => {
             opacity: 0;
             transition: opacity 250ms ease-in-out;
         }
-        & .img-${product.id}-loading{
-            filter: blur(0.5px);
-        }
         & .img-${product.id}-loading::before {
             content: "";
             position: absolute;
