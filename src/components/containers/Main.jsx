@@ -1,12 +1,14 @@
 import './main.css'
 
-import Cart from '../main/cart/Cart';
-import Shop from '../main/shop/Shop';
-
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Orders from './Orders';
 import { useSelector } from 'react-redux';
 import AuthGuard from '../common/AuthGuard';
+import React, { Suspense } from 'react';
+import CenteredIndicator from '../common/CenteredIndicator';
+
+const LazyShop = React.lazy(()=>import('../main/shop/Shop'))
+const LazyCart = React.lazy(()=>import('../main/cart/Cart'))
+const LazyOrders = React.lazy(()=>import('../containers/Orders'))
 
 const Main = ({products, productsLoading, searchText, setSearchText}) => {
   const { userId } = useSelector(state=>state.loggedInUser)
@@ -15,14 +17,23 @@ const Main = ({products, productsLoading, searchText, setSearchText}) => {
       <Routes>
         <Route path='/' element={<Navigate to='/shop' />} />
         {/* <Route path='/home' element={<Navigate to='/shop' />} /> */}
-        <Route path='/shop' element={<Shop products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>} />
-        <Route path='/cart' Component={Cart} />
+        <Route path='/shop' element={
+          <Suspense fallback={<CenteredIndicator loader={true}/>}>
+            <LazyShop products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
+          </Suspense>
+        } />
+        <Route path='/cart' element={
+          <Suspense fallback={<CenteredIndicator loader={true}/>}>
+            <LazyCart />
+          </Suspense>
+        } />
         <Route path='/orders' element={
-          <AuthGuard>
-            <Orders userId={userId}/>
-          </AuthGuard>
-          } 
-        />
+          <Suspense fallback={<CenteredIndicator loader={true}/>}>
+            <AuthGuard>
+              <LazyOrders userId={userId}/>
+            </AuthGuard>
+          </Suspense>
+        } />
         <Route path='/*' element={<Navigate to='/shop' />} />
       </Routes>
     </main>
