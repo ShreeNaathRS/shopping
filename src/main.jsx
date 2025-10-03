@@ -4,7 +4,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 // import swDev from './sw-dev';
@@ -14,11 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='*' Component={App} />
-        </Routes>
-      </BrowserRouter>
+      <App />
     </Provider>
   </React.StrictMode>
 );

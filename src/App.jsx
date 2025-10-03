@@ -2,13 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 
-import Footer from './components/containers/Footer';
-import Header from './components/containers/Header';
 import Main from './components/containers/Main';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAuthAxiosWithProps } from './hooks/useAuthAxiosWithProps';
-import Alert from './components/common/Alert';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import AuthGuard from "./components/common/AuthGuard";
+import { lazyWithSuspense } from "./components/common/lazyWithSuspense"
 
 function App() {
 
@@ -16,22 +16,42 @@ function App() {
   const [productsLoading, setProductsLoading] = useState(true)
   const [products, setProducts] = useState([])
   const { doAPICall: getProducts } = useAuthAxiosWithProps({ setLoader: setProductsLoading })
+  const { userId } = useSelector(state=>state.loggedInUser)
 
   useEffect(() => {
     getProducts('GET', '/products').then(response => setProducts(response));
   }, [getProducts]);
 
-  const appDarkTheme = useSelector(state=>state.appDarkTheme)
-  return (
-    <>
-      <Alert />
-      <div className={`app apply-theme ${appDarkTheme? 'dark': 'light'}`}>
-        <Header setSearchText={setSearchText} />
-        <Main products={products} productsLoading={productsLoading} searchText={searchText} setSearchText={setSearchText}/>
-        <Footer/>
-      </div>
-    </>
-  );
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Main />,
+      children: [
+        {
+          path: '/shop',
+          ...lazyWithSuspense(() => import('./components/main/shop/Shop'), {
+            products,
+            productsLoading,
+            searchText,
+            setSearchText,
+          }),
+        },
+        {
+          path: '/cart',
+          ...lazyWithSuspense(() => import('./components/main/cart/Cart')),
+        },
+        {
+          path: '/orders',
+          ...lazyWithSuspense(() => import('./components/containers/Orders'), {
+            userId,
+            wrapper: AuthGuard,
+          }),
+        },
+      ],
+    },
+  ]);
+  
+  return <RouterProvider router={router}/>;
 }
 
 export default App;
