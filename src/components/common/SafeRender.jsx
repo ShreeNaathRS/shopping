@@ -8,7 +8,7 @@ export const SafeRender = ({ children }) => {
     const errorHandler = (event) => {
       setHasError(true);
       setErrorMsg(event.message);
-      alert("Global error caught:", event.message);
+      alert("Global error caught:", event);
     };
 
     window.addEventListener('error', errorHandler);
